@@ -36,7 +36,11 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 
 Make sure to load the data and use inline code for some of this information.
 
-## One-sentence description of goal
+## Goal and Motivation
+
+Our goal is to analyze how age correlates with dangerous crashes using a January 2024 crash dataset from Massachusetts, with the aim of developing a predictive model to understand and mitigate such incidents.
+
+Investigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large.
 
 
 ## Questions
