@@ -66,7 +66,8 @@ Investigating the relationship between age demographics and dangerous crashes ho
 
 ## Questions
 
-Q1 - What ages are most likely to get  into a dangerous crashes
+Q1 -  Which age groups of drivers and pedestrians/cyclists are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved make the situation more dangerous?
+
 Q2 - Can we develop a model or algorithm to predict when dangerous crashes will occur
 
 To predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements.
