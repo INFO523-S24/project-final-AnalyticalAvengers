@@ -36,9 +36,13 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 
 Make sure to load the data and use inline code for some of this information.
 
+## One-sentence description of goal
+
+
 ## Questions
 
-The two questions you want to answer.
+Q1 - What ages are most likely to get  into a dangerous crashes
+Q2 - Can we develop a model or algorithm to predict when dangerous crashes will occur
 
 ## Analysis plan
 
