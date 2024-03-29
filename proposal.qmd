@@ -72,3 +72,20 @@ Q2 - Can we develop a model or algorithm to predict when dangerous crashes will 
 ## Analysis plan
 
 -   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+
+Variables for question 1 :
+Age of Driver - Youngest Known
+Age of Driver - Oldest Known
+Age of Vulnerable User - Youngest Known
+Age of Vulnerable User - Oldest Known
+
+Crash Severity Variables:
+Crash Severity
+Max Injury Severity Reported
+
+Other Variables:
+Crash Date and Crash Time 
+Number of Vehicles
+Light Conditions, Weather Conditions, Road Surface Conditions
+Speed Limit
+Vehicle Make, Vehicle Model
