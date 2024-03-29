@@ -69,6 +69,11 @@ Investigating the relationship between age demographics and dangerous crashes ho
 Q1 - What ages are most likely to get  into a dangerous crashes
 Q2 - Can we develop a model or algorithm to predict when dangerous crashes will occur
 
+To predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements.
+Logistic Regression, Decision Trees, Random Forests, and Support Vector Machines (SVMs) are the possible candidates for ML methods to implement.
+
+Initially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables, and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection, where the most relevant features are identified to be used in model training. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions.
+
 ## Analysis plan
 
 -   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
