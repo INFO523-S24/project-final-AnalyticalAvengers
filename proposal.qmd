@@ -21,14 +21,24 @@ jupyter: python3
 
 ```{python}
 #| label: load-pkgs
+#| echo: false
 #| message: false
 import numpy as np
 import pandas as pd
 ```
 
+## Goal and Motivation
+
+Our goal is to analyze how age correlates with dangerous crashes using a January 2024 crash dataset from Massachusetts, with the aim of developing a predictive model to understand and mitigate such incidents.
+
+Investigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large.
+
+
 ## Dataset
 
 ```{python}
+#| label: initial-EDA
+
 # Read in the data
 url = 'data/crash_data.csv'
 crash_data = pd.read_csv(url)
@@ -39,6 +49,7 @@ print(f"Dimensions of the dataset: {dimensions} \n")
 
 # Display data types of each column
 data_types = crash_data.dtypes
+print("Display the data types for each feature:")
 print(data_types)
 
 numerical_vars = crash_data.select_dtypes(include = ['int64', 'float64']).columns.tolist()
@@ -53,35 +64,22 @@ crash_data.head()
 
 ```
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
-
-Make sure to load the data and use inline code for some of this information.
-
-## Goal and Motivation
-
-Our goal is to analyze how age correlates with dangerous crashes using a January 2024 crash dataset from Massachusetts, with the aim of developing a predictive model to understand and mitigate such incidents.
-
-Investigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large.
-
 ## Description of the Dataset:
 
-The dataset “crash_data” that will be used for this project has been sourced from the official website of the Massachusetts Registry of Motor Vehicles.                                                                                                                       This dataset was chosen due to the relevance it holds in today’s day and age that is witness to an unfortunate increase in road accidents since the past 30 years. Analysing this data can help find patterns to create an algorithm or model that can predict crashes which could extensively assist in preventing accidents and possible deaths. By working on this data, we can contribute with identification of place/time of possible accidents that could aid in ensuring safer travel experiences for the public.                                                                                                                                   The dataset consists of 72 dimensions, some of which are - Crash Number, City Town/Name, Crash Date, Crash Severity, Crash Time, Crash Year, Max Injury Severity Reported, Age of Driver - Youngest Known, Age of Driver - Oldest Known etc.
+The dataset “crash_data” that will be used for this project has been sourced from the official website of the Massachusetts Registry of Motor Vehicles. This dataset was chosen due to the relevance it holds in today’s day and age that is witness to an unfortunate increase in road accidents since the past 30 years. Analysing this data can help find patterns to create an algorithm or model that can predict crashes which could extensively assist in preventing accidents and possible deaths. By working on this data, we can contribute with identification of place/time of possible accidents that could aid in ensuring safer travel experiences for the public.
+
+The dataset consists of 72 dimensions, some of which are - Crash Number, City Town/Name, Crash Date, Crash Severity, Crash Time, Crash Year, Max Injury Severity Reported, Age of Driver - Youngest Known, Age of Driver - Oldest Known etc.
 
 
 ## Questions
 
-Q1 - Which age groups of drivers and pedestrians/cyclists are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved make the situation more dangerous ? 
+Question 1 - Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger? 
 
-Q2 - Can we develop a model or algorithm to predict when dangerous crashes will occur
-
-To predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements.
-Logistic Regression, Decision Trees, Random Forests, and Support Vector Machines (SVMs) are the possible candidates for ML methods to implement.
-
-Initially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables, and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection, where the most relevant features are identified to be used in model training. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions.
+Question 2 - Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
 
 ## Analysis plan
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+### Question 1
 
 Variables for question 1 :
 Age of Driver - Youngest Known
@@ -99,3 +97,14 @@ Number of Vehicles
 Light Conditions, Weather Conditions, Road Surface Conditions
 Speed Limit
 Vehicle Make, Vehicle Model
+
+
+### Question 2
+
+To predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements.
+Logistic Regression, Decision Trees, Random Forests, and Support Vector Machines (SVMs) are the possible candidates for ML methods to implement.
+
+Initially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables, and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection, where the most relevant features are identified to be used in model training. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions.
+
+
+## Plan of Attack
