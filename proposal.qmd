@@ -70,7 +70,7 @@ The dataset “crash_data” that will be used for this project has been sourced
 
 ## Questions
 
-Q1 -  Which age groups of drivers and pedestrians/cyclists are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved make the situation more dangerous?
+Q1 - Which age groups of drivers and pedestrians/cyclists are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved make the situation more dangerous ? 
 
 Q2 - Can we develop a model or algorithm to predict when dangerous crashes will occur
 
