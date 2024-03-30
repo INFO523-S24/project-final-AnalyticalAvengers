@@ -1,0 +1,128 @@
+[
+  {
+    "objectID": "proposal.html",
+    "href": "proposal.html",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "",
+    "text": "Our goal is to analyze how age correlates with dangerous crashes using a January 2024 crash dataset from Massachusetts, with the aim of developing a predictive model to understand and mitigate such incidents.\nInvestigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large."
+  },
+  {
+    "objectID": "proposal.html#goal-and-motivation",
+    "href": "proposal.html#goal-and-motivation",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "",
+    "text": "Our goal is to analyze how age correlates with dangerous crashes using a January 2024 crash dataset from Massachusetts, with the aim of developing a predictive model to understand and mitigate such incidents.\nInvestigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large."
+  },
+  {
+    "objectID": "proposal.html#dataset",
+    "href": "proposal.html#dataset",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "Dataset",
+    "text": "Dataset\n\n# Read in the data\nurl = 'data/crash_data.csv'\ncrash_data = pd.read_csv(url)\n\n# # Display dimensions of the dataset\ndimensions = crash_data.shape\nprint(f\"Dimensions of the dataset: {dimensions} \\n\")\n\n# Display data types of each column\ndata_types = crash_data.dtypes\nprint(\"Display the data types for each feature:\\n\")\nprint(data_types)\n\nnumerical_vars = crash_data.select_dtypes(include = ['int64', 'float64']).columns.tolist()\ncategorical_vars = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()\n\n# Display the counts of numerical and categorical variables\nprint(f\"\\nNumber of numerical variables: {len(numerical_vars)}\")\nprint(f\"Number of categorical variables: {len(categorical_vars)}\")\nprint('\\n')\n\ncrash_data.head()\n\nDimensions of the dataset: (25550, 72) \n\nDisplay the data types for each feature:\n\nCrash Number       object\nCity Town Name     object\nCrash Date         object\nCrash Severity     object\nCrash Status       object\n                   ...   \nVehicle Make       object\nVehicle Model      object\nPerson Number     float64\nAge               float64\nSex                object\nLength: 72, dtype: object\n\nNumber of numerical variables: 13\nNumber of categorical variables: 59\n\n\n\n\n\n\n\n\n\n\n\nCrash Number\nCity Town Name\nCrash Date\nCrash Severity\nCrash Status\nCrash Time\nCrash Year\nMax Injury Severity Reported\nNumber of Vehicles\nPolice Agency Type\n...\nX\nY\nLatitude\nLongitude\nVehicle Unit Number\nVehicle Make\nVehicle Model\nPerson Number\nAge\nSex\n\n\n\n\n0\n5342297\nLOWELL\n01/01/2024\nNon-fatal injury\nOpen\n3:26 AM\n2024.0\nPossible Injury (C)\n1.0\nLocal police\n...\nNaN\nNaN\nNaN\nNaN\n1.0\nHOND\nHR-V\n1.0\n32.0\nF - Female\n\n\n1\n5342292\nLOWELL\n01/01/2024\nProperty damage only (none injured)\nOpen\n12:48 AM\n2024.0\nNo Apparent Injury (O)\n2.0\nLocal police\n...\nNaN\nNaN\nNaN\nNaN\n1.0\nNISS\nALTIMA\n1.0\n60.0\nM - Male\n\n\n2\n5342292\nLOWELL\n01/01/2024\nProperty damage only (none injured)\nOpen\n12:48 AM\n2024.0\nNo Apparent Injury (O)\n2.0\nLocal police\n...\nNaN\nNaN\nNaN\nNaN\n2.0\nHOND\nACCORD\n2.0\nNaN\nNaN\n\n\n3\n5342292\nLOWELL\n01/01/2024\nProperty damage only (none injured)\nOpen\n12:48 AM\n2024.0\nNo Apparent Injury (O)\n2.0\nLocal police\n...\nNaN\nNaN\nNaN\nNaN\n2.0\nHOND\nACCORD\n3.0\n31.0\nM - Male\n\n\n4\n5342292\nLOWELL\n01/01/2024\nProperty damage only (none injured)\nOpen\n12:48 AM\n2024.0\nNo Apparent Injury (O)\n2.0\nLocal police\n...\nNaN\nNaN\nNaN\nNaN\n2.0\nHOND\nACCORD\n4.0\nNaN\nM - Male\n\n\n\n\n5 rows × 72 columns"
+  },
+  {
+    "objectID": "proposal.html#description-of-the-dataset",
+    "href": "proposal.html#description-of-the-dataset",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "Description of the Dataset:",
+    "text": "Description of the Dataset:\nThe dataset “crash_data” that will be used for this project has been sourced from the official website of the Massachusetts Registry of Motor Vehicles. This dataset was chosen due to the relevance it holds in today’s day and age that is witness to an unfortunate increase in road accidents since the past 30 years. Analysing this data can help find patterns to create an algorithm or model that can predict crashes which could extensively assist in preventing accidents and possible deaths. By working on this data, we can contribute with identification of place/time of possible accidents that could aid in ensuring safer travel experiences for the public.\nThe dataset consists of 72 dimensions, some of which are - Crash Number, City Town/Name, Crash Date, Crash Severity, Crash Time, Crash Year, Max Injury Severity Reported, Age of Driver - Youngest Known, Age of Driver - Oldest Known etc."
+  },
+  {
+    "objectID": "proposal.html#questions",
+    "href": "proposal.html#questions",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "Questions",
+    "text": "Questions\nQuestion 1 - Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger?\nQuestion 2 - Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?"
+  },
+  {
+    "objectID": "proposal.html#analysis-plan",
+    "href": "proposal.html#analysis-plan",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "Analysis plan",
+    "text": "Analysis plan\n\nQuestion 1\nVariables for question 1 : Age of Driver - Youngest Known Age of Driver - Oldest Known Age of Vulnerable User - Youngest Known Age of Vulnerable User - Oldest Known\nCrash Severity Variables: Crash Severity Max Injury Severity Reported\nOther Variables: Crash Date and Crash Time Number of Vehicles Light Conditions, Weather Conditions, Road Surface Conditions Speed Limit Vehicle Make, Vehicle Model\n\n\nQuestion 2\nTo predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements. Logistic Regression, Decision Trees, Random Forests, and Support Vector Machines (SVMs) are the possible candidates for ML methods to implement.\nInitially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables, and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection, where the most relevant features are identified to be used in model training. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions."
+  },
+  {
+    "objectID": "presentation.html",
+    "href": "presentation.html",
+    "title": "Project title",
+    "section": "",
+    "text": "The presentation is created using the Quarto CLI\n## sets the start of a new slide\n\n\n\n\nYou can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis\n\n\n\n\n\n\n                            OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.073\nModel:                            OLS   Adj. R-squared:                  0.070\nMethod:                 Least Squares   F-statistic:                     30.59\nDate:                Tue, 05 Dec 2023   Prob (F-statistic):           5.84e-08\nTime:                        15:26:39   Log-Likelihood:                -1346.4\nNo. Observations:                 392   AIC:                             2697.\nDf Residuals:                     390   BIC:                             2705.\nDf Model:                           1                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         35.8015      2.266     15.800      0.000      31.347      40.257\nspeed       -354.7055     64.129     -5.531      0.000    -480.788    -228.623\n==============================================================================\nOmnibus:                       27.687   Durbin-Watson:                   0.589\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               18.976\nSkew:                           0.420   Prob(JB):                     7.57e-05\nKurtosis:                       2.323   Cond. No.                         169.\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSome text\ngoes here"
+  },
+  {
+    "objectID": "presentation.html#quarto",
+    "href": "presentation.html#quarto",
+    "title": "Project title",
+    "section": "",
+    "text": "The presentation is created using the Quarto CLI\n## sets the start of a new slide"
+  },
+  {
+    "objectID": "presentation.html#layouts",
+    "href": "presentation.html#layouts",
+    "title": "Project title",
+    "section": "",
+    "text": "You can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis"
+  },
+  {
+    "objectID": "presentation.html#code",
+    "href": "presentation.html#code",
+    "title": "Project title",
+    "section": "",
+    "text": "OLS Regression Results                            \n==============================================================================\nDep. Variable:                    mpg   R-squared:                       0.073\nModel:                            OLS   Adj. R-squared:                  0.070\nMethod:                 Least Squares   F-statistic:                     30.59\nDate:                Tue, 05 Dec 2023   Prob (F-statistic):           5.84e-08\nTime:                        15:26:39   Log-Likelihood:                -1346.4\nNo. Observations:                 392   AIC:                             2697.\nDf Residuals:                     390   BIC:                             2705.\nDf Model:                           1                                         \nCovariance Type:            nonrobust                                         \n==============================================================================\n                 coef    std err          t      P&gt;|t|      [0.025      0.975]\n------------------------------------------------------------------------------\nconst         35.8015      2.266     15.800      0.000      31.347      40.257\nspeed       -354.7055     64.129     -5.531      0.000    -480.788    -228.623\n==============================================================================\nOmnibus:                       27.687   Durbin-Watson:                   0.589\nProb(Omnibus):                  0.000   Jarque-Bera (JB):               18.976\nSkew:                           0.420   Prob(JB):                     7.57e-05\nKurtosis:                       2.323   Cond. No.                         169.\n==============================================================================\n\nNotes:\n[1] Standard Errors assume that the covariance matrix of the errors is correctly specified."
+  },
+  {
+    "objectID": "presentation.html#plot-and-text",
+    "href": "presentation.html#plot-and-text",
+    "title": "Project title",
+    "section": "",
+    "text": "Some text\ngoes here"
+  },
+  {
+    "objectID": "presentation.html#tables",
+    "href": "presentation.html#tables",
+    "title": "Project title",
+    "section": "Tables",
+    "text": "Tables\nIf you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,\n\n\n\n\n\n\n\n\n\n\n\n\nspecies\n\n\n\nisland\n\n\n\nbill_length_mm\n\n\n\nbill_depth_mm\n\n\n\nflipper_length_mm\n\n\n\nbody_mass_g\n\n\n\nsex\n\n\n\n\n\n\n\n\n\n\n\n0\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.1\n\n\n\n18.7\n\n\n\n181.0\n\n\n\n3750.0\n\n\n\nMale\n\n\n\n\n\n\n\n1\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.5\n\n\n\n17.4\n\n\n\n186.0\n\n\n\n3800.0\n\n\n\nFemale\n\n\n\n\n\n\n\n2\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n40.3\n\n\n\n18.0\n\n\n\n195.0\n\n\n\n3250.0\n\n\n\nFemale\n\n\n\n\n\n\n\n4\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n36.7\n\n\n\n19.3\n\n\n\n193.0\n\n\n\n3450.0\n\n\n\nFemale\n\n\n\n\n\n\n\n5\n\n\n\nAdelie\n\n\n\nTorgersen\n\n\n\n39.3\n\n\n\n20.6\n\n\n\n190.0\n\n\n\n3650.0\n\n\n\nMale"
+  },
+  {
+    "objectID": "presentation.html#images",
+    "href": "presentation.html#images",
+    "title": "Project title",
+    "section": "Images",
+    "text": "Images\n\n\n\nImage credit: Danielle Navarro, Percolate."
+  },
+  {
+    "objectID": "presentation.html#math-expressions",
+    "href": "presentation.html#math-expressions",
+    "title": "Project title",
+    "section": "Math Expressions",
+    "text": "Math Expressions\nYou can write LaTeX math expressions inside a pair of dollar signs, e.g. $\\alpha+\\beta$ renders \\(\\alpha + \\beta\\). You can use the display style with double dollar signs:\n$$\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i$$\n\\[\n\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i\n\\]\nLimitations:\n\nThe source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting $$ must appear in the very beginning of a line, followed immediately by a non-space character, and the ending $$ must be at the end of a line, led by a non-space character;\nThere should not be spaces after the opening $ or before the closing $."
+  },
+  {
+    "objectID": "presentation.html#feeling-adventurous",
+    "href": "presentation.html#feeling-adventurous",
+    "title": "Project title",
+    "section": "Feeling adventurous?",
+    "text": "Feeling adventurous?\n\nYou are welcomed to use the default styling of the slides. In fact, that’s what I expect majority of you will do. You will differentiate yourself with the content of your presentation.\nBut some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs."
+  },
+  {
+    "objectID": "presentation.html#footnotes",
+    "href": "presentation.html#footnotes",
+    "title": "Project title",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nAnd add footnotes↩︎"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This project was developed by [Team Name] For INFO 523 - Data Mining and Discovery at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\nTeam member 1: One sentence description of Team member 1 (e.g., year, major, etc.).\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.)."
+  },
+  {
+    "objectID": "proposal.html#plan-of-attack",
+    "href": "proposal.html#plan-of-attack",
+    "title": "ANALYTICAL AVENGERS- Proposal",
+    "section": "Plan of Attack",
+    "text": "Plan of Attack"
+  }
+]
