@@ -81,9 +81,13 @@ Initially, the dataset undergoes a preprocessing phase to handle missing values,
 
 ## Analysis plan
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+-   ### Analysis plan for Question 1
 
-Variables for question 1 :
+Understanding who's most likely to be in a serious crash is crucial for making our roads safer. We'll be diving into crash data to see which age groups, for both drivers and pedestrians/cyclists, are most at risk for severe crashes (think bad injuries).
+
+Next, we'll shift gears and investigate the role of the environment.  We'll see if crashes are more likely to be severe under certain conditions, like bad weather, nighttime driving, or busy roads. By pinpointing these risky situations, we can identify areas for improvement, like better lighting or stricter enforcement of speed limits. 
+
+Variables for  Question 1 :
 Age of Driver - Youngest Known
 Age of Driver - Oldest Known
 Age of Vulnerable User - Youngest Known
@@ -99,3 +103,5 @@ Number of Vehicles
 Light Conditions, Weather Conditions, Road Surface Conditions
 Speed Limit
 Vehicle Make, Vehicle Model
+
+Visualizations :  we are going to used in this is Bar plots for Crash Severity by Age, Heatmaps for Combined Risk Factorsand for Speed and Severity we are going to use Scatter Plots
