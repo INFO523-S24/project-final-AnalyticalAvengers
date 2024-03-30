@@ -2,7 +2,8 @@
 title: "ANALYTICAL AVENGERS- Proposal"
 subtitle: "Proposal"
 author: 
-  - name: "Team Name - Team member 1, Team member 2,..."
+  - name: "ANALYTICAL AVENGERS- 
+    MELIKA AKBARSHARIFI, Divya liladhar Dhole, Mohammad Ali Farmani, H M Abdul Fattah, Gabriel Gedaliah Geffen, Tanya George, Sunday Usman "
     affiliations:
       - name: "School of Information, University of Arizona"
 description: "Project description"
@@ -80,7 +81,7 @@ Question 2 - Is it possible to develop a model that can accurately classify the 
 ## Analysis plan
 
 -   ### Analysis plan for Question 1
-### Question 1
+
 
 Understanding who's most likely to be in a serious crash is crucial for making our roads safer. We'll be diving into crash data to see which age groups, for both drivers and pedestrians/cyclists, are most at risk for severe crashes (think bad injuries).
 
