@@ -7,37 +7,7 @@ The dataset consists of 72 dimensions, some of which are - Crash Number, City To
 
 
 
-```{python}
-#| label: initial-EDA
-#| echo: false
-#| message: false
-
-import numpy as np
-import pandas as pd
-# Read in the data
-url = 'data/crash_data.csv'
-crash_data = pd.read_csv(url)
-
-# # Display dimensions of the dataset
-dimensions = crash_data.shape
-print(f"Dimensions of the dataset: {dimensions} \n")
-
-# Display data types of each column
-data_types = crash_data.dtypes
-print("Display the data types for each feature:")
-print(data_types)
-
-numerical_vars = crash_data.select_dtypes(include = ['int64', 'float64']).columns.tolist()
-categorical_vars = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()
-
-# Display the counts of numerical and categorical variables
-print(f"\nNumber of numerical variables: {len(numerical_vars)}")
-print(f"Number of categorical variables: {len(categorical_vars)}")
-print('\n')
-
-crash_data.head()
-
-```
-
-
+| Variable                                     | Class       | Description                                    | 
+|----------------------------------------------|--------------|---------------------------------------------------|
+| X                  | Y         | Z  | 
 
