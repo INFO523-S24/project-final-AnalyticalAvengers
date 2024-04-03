@@ -66,7 +66,6 @@ print(f"Number of categorical variables: {len(categorical_vars)}")
 print('\n')
 
 crash_data.head()
-
 ```
 
 ## Description of the Dataset:
@@ -75,6 +74,8 @@ The dataset “crash_data” that will be used for this project has been sourced
 
 The dataset consists of 72 dimensions, some of which are - Crash Number, City Town/Name, Crash Date, Crash Severity, Crash Time, Crash Year, Max Injury Severity Reported, Age of Driver - Youngest Known, Age of Driver - Oldest Known etc.
 
+Dataset Source: Crash Query and Visualization <br>
+Url: https://apps.impact.dot.state.ma.us/cdv/
 
 ## Questions
 
@@ -118,15 +119,15 @@ Initially, the dataset undergoes a preprocessing phase to handle missing values,
 
 ## Plan of Attack
 
-| Task Name | Status | Assignee | Due | Priority | Summary |
-|---------- |--------|----------|-----|----------|---------|
+| Task Name |Status| Assignee | Due    | Priority | Summary    |
+|---------- |------|----------|--------|-----|----------------|
 | Develop Data Retrieval Code | Done  | HM Abdul Fattah | 28-Mar-24  | High | Writing a code to retrieve data, following best practices and considering error handling and data validation. |
 | Coming Up with Questions and Choosing a Dataset | Done         | Gabriel Geffen                                    | 28-Mar-24  | High     | Creating a structured framework for organizing the questions, considering logical flow, relevance, and coherence to real world applications. |
-| Description of Dataset  | Done         | Tanya George | 28 March   | High     | Providing an overview of the dataset to better understand which variables are relevant to the goal of our project. |
+| Description of Dataset  | Done         | Tanya George | 28-Mar-24   | High     | Providing an overview of the dataset to better understand which variables are relevant to the goal of our project. |
 | Question 1 Analysis | Done         | Divya Dhole, Melika Akbarsharifi | 28-Mar-24  | High     | Melika Akbarsharifi wrote the variables that should be included for question 1 and Divaya Dhole wrote down the question Analysis |
 | Question 2 Analysis | Done         | Mohammad Ali Farmani | 28-Mar-24  | High     | Mohammad Ali Farmani wrote down the question 2 analysis. |
 | Plan of Attack  | Done         | Sunday Usman | 28-Mar-24  | High     | Sunday wrote down the Plan of Attack in google sheet. |
-| Implementation of Solution for Question 1 | In Progress  | Tanya George, Divya Dhole, Melika Akbarsharifi | 14-Apr-24  | High     | Analyzes crash data to identify age groups at highest risk, examining factors such as lighting, weather, and road conditions. |
-| Model setup and Implementation for Question 2 | Not started  | Gabriel Geffen, H.M. Abdul Fattah, Mohammad Ali Farmani, Sunday Usman | 28-Apr-24  | High | Feature Engineering, Model Selection and Evaluation, Performance Assessment. Possibly, develop a dashboard for easy interpretation and communication of findings. |
+| Implementation of Solution for Question 1 | In Progress  | Tanya George, Divya Dhole, Melika Akbarsharifi| 14-Apr-24  | High     | Analyzes crash data to identify age groups at highest risk, examining factors such as lighting, weather, and road conditions. |
+| Model setup and Implementation for Question 2 | Not started  | Gabriel Geffen, HM Fattah, Mohammad Farmani, Sunday Usman | 28-Apr-24  | High | Feature Engineering, Model Selection and Evaluation, Performance Assessment. Possibly, develop a dashboard for easy interpretation and communication of findings. |
 | Report writing | Not started  | Everyone | 6-May-24  | High     | Writing a report and communicate all our findings. Everyone will work on seperate componet of the final report. |
 | Presentation | Not started  | Everyone | 6-May-24  | High     | Delivering a presentation based on our discoveries. Everyone will contribute. |
