@@ -14,6 +14,7 @@ The dataset consists of 72 dimensions, some of which are - Crash Number, City To
 |Age of Vulnerable User - Youngest Known| Float64         | The age of youngest vulnerable person in the crash      | 
 |Age of Vulnerable User - Oldest Known| Float64         | The age of oldest vulnerable person in the crash      | 
 | Crash Severity           | object         | The level of severity of the accident   | 
+| ...    | ...         | ...  |
 |Max Injury Severity Reported| object         | Maximum injury caused by the crash   | 
 | Crash Date and Crash Time| object         | The date that crash happened   | 
 | Crash  Time| object         | The time that crash happened   | 
