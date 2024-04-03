@@ -2,7 +2,7 @@
 title: "Project Title"
 subtitle: "INFO 523 - Project Final"
 author: 
-  - name: "Team name - Team member 1, Team member 2,..."
+  - name: "ANALYTICAL AVENGERS - MELIKA AKBARSHARIFI, Divya liladhar Dhole,/n Mohammad Ali Farmani, H M Abdul Fattah, Gabriel Gedaliah Geffen,/n Tanya George, Sunday Usman"
     affiliations:
       - name: "School of Information, University of Arizona"
 description: "Project description"

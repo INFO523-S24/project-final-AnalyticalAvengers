@@ -7,9 +7,9 @@ jupyter: python3
 
 This project was developed by **\[Team Name\]** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.
 
--   Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).
+-   Tanya Evita George- First year graduate student pursuing Data Science at the University of Arizona.
 
--   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).
+-   Mohammad Ali Farmani : 2nd year PhD student in Hydrology and Atmospheric Sciences in University of Arizona.
 
 -   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
 
