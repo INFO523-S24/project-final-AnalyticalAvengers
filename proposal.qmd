@@ -2,8 +2,8 @@
 title: "ANALYTICAL AVENGERS- Proposal"
 subtitle: "Proposal"
 author: 
-  - name: "ANALYTICAL AVENGERS- 
-    MELIKA AKBARSHARIFI<br>, Divya liladhar Dhole<br>, Mohammad Ali Farmani<br>, H M Abdul Fattah<br>, Gabriel Gedaliah Geffen<br>, Tanya George<br>, Sunday Usman "
+  - name: "ANALYTICAL AVENGERS-<br>
+    MELIKA AKBARSHARIFI,<br> Divya liladhar Dhole,<br> Mohammad Ali Farmani,<br> H M Abdul Fattah,<br> Gabriel Gedaliah Geffen,<br> Tanya George<br>, Sunday Usman "
     affiliations:
       - name: "School of Information, University of Arizona"
 description: "Project description"
