@@ -21,7 +21,7 @@ The dataset consists of 72 dimensions, some of which are - Crash Number, City To
 | Weather Conditions| object | How was the  weather condition during the accident  | 
 | Road Surface Conditions| object | How was the  road surface conditions during the accident| 
 | Light Conditions| object         | What was the light condition in the location of the accident    | 
-| Speed Limit| dloat64         | What was the speed limit of the road accident happend | 
+| Speed Limit| float64         | What was the speed limit of the road accident happend | 
 | Vehicle Model| object         | What was the vehicle model of the crashed car | 
 
 
