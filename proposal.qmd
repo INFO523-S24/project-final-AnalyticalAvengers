@@ -34,6 +34,10 @@ Our goal is to analyze how age correlates with dangerous crashes using a January
 
 Investigating the relationship between age demographics and dangerous crashes holds significant importance in enhancing road safety measures and reducing the frequency of severe accidents. By delving into the January 2024 crash dataset from Massachusetts, our analysis seeks to uncover patterns and trends that can elucidate how age influences the likelihood and severity of crashes. Moreover, the development of predictive models based on this analysis offers practitioners and policymakers valuable tools for proactive decision-making and resource allocation. By accurately predicting areas and times with heightened crash risks based on age demographics, authorities can implement preemptive measures. Ultimately, our research endeavors not only contribute to the advancement of data-driven approaches in traffic safety but also hold the potential to make tangible improvements in road safety practices, benefiting both practitioners and society at large.
 
+High-Level Goals:
+Anomaly Detection in Road Safety: By identifying outliers in crash data—situations that deviate from the norm—we can pinpoint unusual patterns, such as unexpected high-risk areas for certain age groups or conditions, thereby enhancing targeted interventions.
+Association Rule Mining for Safety Measures: Through this technique, we aim to uncover hidden patterns and relationships between various factors (like weather conditions, time, and demographic details) contributing to severe crashes, facilitating the development of tailored preventive measures.
+Interactive Data Visualization: Developing an interactive dashboard that provides real-time insights into crash data, enabling policymakers, researchers, and the public to explore and understand the nuances of road safety dynamically.
 
 ## Dataset
 
