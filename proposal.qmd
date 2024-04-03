@@ -1,5 +1,5 @@
 ---
-title: "Crash Insight: Exploring Age Demographics and Prediction for Crash Severity for Enhanced Road Safety"
+title: "Prediction for Crash Severity for Enhanced Road Safety"
 subtitle: "INFO 523 - Project Final"
 author: 
   - name: "ANALYTICAL AVENGERS - <br>
@@ -70,12 +70,11 @@ crash_data.head()
 
 ## Description of the Dataset:
 
-The dataset “crash_data” that will be used for this project has been sourced from the official website of the Massachusetts Registry of Motor Vehicles. This dataset was chosen due to the relevance it holds in today’s day and age that is witness to an unfortunate increase in road accidents since the past 30 years. Analysing this data can help find patterns to create an algorithm or model that can predict crashes which could extensively assist in preventing accidents and possible deaths. By working on this data, we can contribute with identification of place/time of possible accidents that could aid in ensuring safer travel experiences for the public.
+The dataset <a href="https://apps.impact.dot.state.ma.us/cdv/" style="color:red"> Crash Query and Visualization</a> that will be used for this project has been sourced from the official website of the Massachusetts Registry of Motor Vehicles. This dataset was chosen due to the relevance it holds in today’s day and age that is witness to an unfortunate increase in road accidents since the past 30 years. Analysing this data can help find patterns to create an algorithm or model that can predict crashes which could extensively assist in preventing accidents and possible deaths. By working on this data, we can contribute with identification of place/time of possible accidents that could aid in ensuring safer travel experiences for the public.
 
 The dataset consists of 72 dimensions, some of which are - Crash Number, City Town/Name, Crash Date, Crash Severity, Crash Time, Crash Year, Max Injury Severity Reported, Age of Driver - Youngest Known, Age of Driver - Oldest Known etc.
 
-Dataset Source: Crash Query and Visualization <br>
-Url: https://apps.impact.dot.state.ma.us/cdv/
+The description of the variable can be found in README.md file.
 
 ## Questions
 
@@ -113,11 +112,12 @@ Vehicle Make, Vehicle Model
 Visualizations :  we are going to used in this is Bar plots for Crash Severity by Age, Heatmaps for Combined Risk Factorsand for Speed and Severity we are going to use Scatter Plots
 
 ### Analysis plan for Question 2
+! add a line about the feature Engineering
 
 To predict the severity of crashes and classify them as dangerous or not, several machine learning (ML) methods can be effectively utilized. Each method brings its own strengths and weaknesses, and the choice often depends on the specific characteristics of the dataset, the complexity of the relationships between features, and the interpretability requirements.
 Logistic Regression, Decision Trees, Random Forests, and Support Vector Machines (SVMs) are the possible candidates for ML methods to implement.
 
-Initially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables, and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection, where the most relevant features are identified to be used in model training. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions.
+Initially, the dataset undergoes a preprocessing phase to handle missing values, encode categorical variables(all the categorical variables in our dataset), and potentially scale numerical features. The target variable, defining crash severity, is also established during this phase. The next step involves feature selection and engineering, where the most relevant features are identified to be used in model training using correlation analysis and random forest feature importance, and then the dimension reduction will be done using PCA analysis. Various ML models are then trained on a portion of the data, and their performance is evaluated using a separate test set. Metrics such as accuracy, precision, recall, and F1-score are commonly used to assess model performance. Based on these evaluations, the best-performing model is selected, tuned for optimal performance through hyperparameter optimization, and then validated to ensure its generalizability. Finally, the chosen model can be deployed to predict the severity of new crashes, providing valuable insights for safety measures and interventions.
 
 ## Plan of Attack
 
