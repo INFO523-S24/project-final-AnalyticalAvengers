@@ -14,3 +14,5 @@ This project was developed by **ANALYTICAL AVENGERS** For [INFO 523 - Data Minin
 -   Melika Akbarsharifi - second year Graduate - ECE major.
 
 -   Sunday Usman - Graduate student - Systems and Industrial Engineering major.
+
+-   H M Abdul Fattah - Graduate student - Information Science, University of Arizona.
