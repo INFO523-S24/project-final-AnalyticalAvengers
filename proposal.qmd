@@ -79,9 +79,11 @@ Url: https://apps.impact.dot.state.ma.us/cdv/
 
 ## Questions
 
-Question 1 - Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger? 
+#### Question 1:
+Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger? 
 
-Question 2 - Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
+#### Question 2:
+Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
 
 ## Analysis plan
 
