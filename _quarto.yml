@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "<img src='/images/carcrash.png' alt='childcare' style='width: 1.75em; height: 1.75em; border-radius: 50%'> <b>Childcare Cost Analysis  </b>"
+  title: "<img src='/images/carcrash.png' alt='carcrash' style='width: 1.75em; height: 1.75em; border-radius: 50%'> <b>Car Crash Analysis  </b>"
   navbar:
     right:
       - icon: github
