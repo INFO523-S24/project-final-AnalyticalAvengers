@@ -11,6 +11,6 @@ This project was developed by **\[Team Name\]** For [INFO 523 - Data Mining and 
 
 -   Mohammad Ali Farmani : 2nd year PhD student in Hydrology and Atmospheric Sciences in University of Arizona.
 
--   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
+-   Melika Akbarsharifi - second year Graduate - ECE major.
 
 -   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
