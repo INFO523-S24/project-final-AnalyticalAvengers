@@ -1,8 +1,8 @@
 {
-  "hash": "4551a4da8c5b2851bdf645908f7bbcd4",
+  "hash": "c73eeaea4f79fde79577bb2d988b9365",
   "result": {
     "engine": "jupyter",
-    "markdown": "---\ntitle: Project Title\nsubtitle: INFO 523 - Project Final\nauthor:\n  - name: 'Team name - Team member 1, Team member 2,...'\n    affiliations:\n      - name: 'School of Information, University of Arizona'\ndescription: Project description\nformat:\n  html:\n    code-tools: true\n    code-overflow: wrap\n    embed-resources: true\neditor: visual\nexecute:\n  warning: false\n  echo: false\n---\n\n## Abstract\n\nAdd project abstract here.\n\n",
+    "markdown": "---\ntitle: ANALYTICAL AVENGERS\nsubtitle: INFO 523 - Project Final\nauthor:\n  - name: 'ANALYTICAL AVENGERS-<br> MELIKA AKBARSHARIFI,<br> Divya liladhar Dhole,<br> Mohammad Ali Farmani,<br> H M Abdul Fattah,<br> Gabriel Gedaliah Geffen,<br> Tanya George<br>, Sunday Usman '\n    affiliations:\n      - name: 'School of Information, University of Arizona'\ndescription: Project description\nformat:\n  html:\n    code-tools: true\n    code-overflow: wrap\n    embed-resources: true\neditor: visual\nexecute:\n  warning: false\n  echo: false\n---\n\n## Abstract\n\nAdd project abstract here.\n\n",
     "supporting": [
       "index_files\\figure-html"
     ],
