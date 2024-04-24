@@ -22,3 +22,56 @@ jupyter: python3
 ## Abstract
 
 Add project abstract here.
+
+```{python}
+#| label: load-pkgs
+#| echo: false
+#| message: false
+import numpy as np
+import pandas as pd
+```
+
+```{python}
+#| label: initial-EDA
+
+# Read in the data
+url = 'data/crash_data.csv'
+crash_data = pd.read_csv(url)
+```
+
+
+### Question 2:
+
+```{python}
+#| label: Handling-missing-and-duplicate-rows
+
+# Print the initial shape of the data
+print("Initial data shape:", crash_data.shape)
+
+# Handling duplicate rows
+crash_data.drop_duplicates(inplace = True)
+
+# Removing columns with too many missing values
+threshold = len(crash_data) * 0.5
+crash_data.dropna(axis = 1, thresh = int(threshold), inplace = True)
+
+# Removing rows with missing values
+crash_data.dropna(inplace = True)
+
+# Print the final shape of the data and remaining columns
+print("Final data shape:", crash_data.shape)
+```
+
+```{python}
+#| label: standardizing-features
+```
+
+```{python}
+#| label: splitting-the-dataset
+
+X = crash_data[selected_features] # Independent variables
+y = crash_data['relative_cost'] # Dependent variable
+
+# Splitting the data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 9)
+```
