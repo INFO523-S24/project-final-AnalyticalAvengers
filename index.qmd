@@ -67,6 +67,17 @@ print("Final data shape:", crash_data.shape)
 ```
 
 ```{python}
+#| label: standardizing-features
+
+# Filter rows where the severity is unknow
+crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
+
+# Add a new column named 'feature_variable'
+crash_data['feature_variable'] = [0 if x == 'Property damage only (none injured)' else 1 for x in crash_data['Crash Severity']]
+
+```
+
+```{python}
 #| label: splitting-the-dataset
 
 X = crash_data[selected_features] # Independent variables
