@@ -27,62 +27,262 @@ Add project abstract here.
 #| label: load-pkgs
 #| echo: false
 #| message: false
-import numpy as np
+
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import numpy as np
+
+import warnings
+# Ignore all warnings
+warnings.filterwarnings("ignore")
 ```
 
 ```{python}
-#| label: initial-EDA
-
 # Read in the data
 url = 'data/crash_data.csv'
 crash_data = pd.read_csv(url)
+```
+
+```{python}
+# Get the distinct data types of features in the DataFrame
+distinct_data_types = crash_data.dtypes.unique()
+
+print("Distinct data types of features in crash_data:")
+print(distinct_data_types)
+
+# Display the first few rows to understand the structure of the dataset
+print('First few rows of the crash data: \n', crash_data.head())
 ```
 
 
 ### Question 2:
 
 ```{python}
-#| label: Handling-missing-and-duplicate-rows
-
-# Print the initial shape of the data
-print("Initial data shape:", crash_data.shape)
-
-# Handling duplicate rows
-crash_data.drop_duplicates(inplace = True)
-
-# Removing columns with too many missing values
-threshold = len(crash_data) * 0.5
-crash_data.dropna(axis = 1, thresh = int(threshold), inplace = True)
-
-# Removing rows with missing values
-crash_data.dropna(inplace = True)
-
-# Print the final shape of the data and remaining columns
-print("Final data shape:", crash_data.shape)
-```
-
-```{python}
-#| label: standardizing-features
-```
-
-```{python}
-#| label: standardizing-features
-
 # Filter rows where the severity is unknow
 crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
 
 # Add a new column named 'feature_variable'
 crash_data['feature_variable'] = [0 if x == 'Property damage only (none injured)' else 1 for x in crash_data['Crash Severity']]
 
+# Drop the 'Crash Severity' column
+crash_data = crash_data.drop('Crash Severity', axis=1)
 ```
 
 ```{python}
-#| label: splitting-the-dataset
+# Indetify & Visualize relationships between features and the target variable 'feature_variable'
 
-X = crash_data[selected_features] # Independent variables
-y = crash_data['relative_cost'] # Dependent variable
+# Instead of using all the features, I am using custom_feature_set 
+# for simplicity with 3 most correlated features and 2 least correlated features
 
-# Splitting the data into training and testing
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 9)
+numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+
+correlation_matrix = numerical_cols.corr()
+
+# The correlation of each feature with the target variable 'mc_preschool'
+correlation_with_target = correlation_matrix['feature_variable'].abs().sort_values(ascending=False)
+
+most_correlated_features = correlation_with_target[1:4]  # Exclude the target variable itself
+least_correlated_features = correlation_with_target[-2:] 
+
+# Convert the indices of selected features to a list and merge them together
+most_correlated_features = most_correlated_features.index.tolist()
+least_correlated_features = least_correlated_features.index.tolist()
+custom_feature_set = most_correlated_features + least_correlated_features
+
+# Visualize relationships between the custom feature set and the target variable using a pairplot
+sns.pairplot(numerical_cols, x_vars=custom_feature_set, y_vars='feature_variable', kind='scatter')
+plt.show()
+
+```
+
+```{python}
+# Data Cleaning
+# Analysis of Missing Values
+
+# Find numerical columns
+numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+
+# Calculate missing values count for each numerical column
+missing_values_count = numerical_cols.isnull().sum()
+
+# Calculate missing rate for each numerical column
+missing_rate = (missing_values_count / len(crash_data)) * 100
+
+missing_data = pd.DataFrame({
+    'Missing Values': missing_values_count,
+    'Percentage (%)': missing_rate
+})
+
+print('Analysis of Missing Values for numerical features: \n\n', missing_data, '\n\n')
+
+# Drop categorical columns with missing rate over 50%
+columns_to_drop = missing_rate[missing_rate > 50].index
+crash_data = crash_data.drop(columns_to_drop, axis=1)
+
+# Find categorical columns
+categorical_columns = crash_data.select_dtypes(include = ['object', 'category'])
+
+# Calculate missing values count for each categorical column
+missing_values_count = categorical_columns.isnull().sum()
+
+# Calculate missing rate for each categorical column
+missing_rate = (missing_values_count / len(crash_data)) * 100
+
+missing_data = pd.DataFrame({
+    'Missing Values': missing_values_count,
+    'Percentage (%)': missing_rate
+})
+
+print('Analysis of Missing Values for categorical features: \n\n', missing_data, '\n\n')
+
+# Drop categorical columns with missing rate over 50%
+columns_to_drop = missing_rate[missing_rate > 50].index
+crash_data = crash_data.drop(columns_to_drop, axis=1)
+```
+
+```{python}
+all_columns = crash_data.select_dtypes(include = ['int64', 'float64', 'object', 'category'])
+
+# Calculate mode for each categorical column
+mode_values = all_columns.mode().iloc[0]
+
+# Fill missing values with mode for each column
+crash_data = crash_data.fillna(mode_values)
+
+print(crash_data.head())
+```
+
+```{python}
+# Standardize features with StandardScaler
+
+numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64']).columns
+
+# Exclude our output feature: 'feature_variable'
+feature_to_exclude = 'feature_variable'
+numerical_cols = numerical_cols.drop(feature_to_exclude, errors='ignore')
+
+scaler = StandardScaler()
+
+# Fit and transform the numerical columns using StandardScaler
+crash_data[numerical_cols] = scaler.fit_transform(crash_data[numerical_cols])
+
+# Display the first few rows of the scaled dataset
+print(crash_data.head())
+```
+
+```{python}
+# Encode categorical variables
+categorical_columns = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()
+
+# Convert numerical columns to strings if necessary
+crash_data[categorical_columns] = crash_data[categorical_columns].astype(str)
+
+# Encode categorical variables
+label_encoders = {col: LabelEncoder() for col in categorical_columns}
+for col in categorical_columns:
+    crash_data[col] = label_encoders[col].fit_transform(crash_data[col])
+
+# Convert categorical columns to numerical using one-hot encoding
+crash_data = pd.get_dummies(crash_data, columns=categorical_columns)
+
+print(crash_data.head())
+```
+
+```{python}
+# Define features and target
+X = crash_data.drop('feature_variable', axis = 1)
+y = crash_data['feature_variable']
+```
+
+```{python}
+batch_size = 100
+
+# Initialize an empty array to store the selected feature indices
+selected_feature_indices = []
+
+# Iterate over the dataset in batches and perform feature selection
+for batch_start in range(0, len(X), batch_size):
+    X_batch = X.iloc[batch_start:batch_start+batch_size]
+    y_batch = y.iloc[batch_start:batch_start+batch_size]
+    
+    # Perform feature selection on the current batch
+    k_best_selector = SelectKBest(score_func=f_classif, k=30)
+    X_selected_batch = k_best_selector.fit_transform(X_batch, y_batch)
+    
+    # Get the indices of the selected features and append to the list
+    selected_feature_indices.extend(k_best_selector.get_support(indices=True))
+
+# Get the names of the selected features
+selected_features = X.columns[selected_feature_indices]
+
+print('Selected features: \n\n', selected_features)
+
+# Extract the selected features from the original DataFrame X
+X_selected = X[selected_features]
+```
+
+```{python}
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=42)
+
+# Display the shapes of the training and testing sets
+print("Shape of X_train:", X_train.shape)
+print("Shape of X_test:", X_test.shape)
+print("Shape of y_train:", y_train.shape)
+print("Shape of y_test:", y_test.shape)
+```
+
+```{python}
+log_reg = LogisticRegression(solver = 'liblinear', max_iter = 1000, random_state = 42)
+log_reg.fit(X_train, y_train)
+
+#dtree = DecisionTreeClassifier()
+#dtree.fit(X_train, y_train)
+
+#rf_classifier = RandomForestClassifier()
+#rf_classifier.fit(X_train, y_train)
+
+#knn = KNeighborsClassifier(n_neighbors = 5)
+#knn.fit(X_train, y_train)
+```
+
+```{python}
+# Model Validation
+
+# List of classifiers
+#classifiers = [log_reg, dtree, rf_classifier, knn]
+classifiers = [log_reg]
+
+# Perform cross-validation and compute evaluation metrics for each classifier
+for classifier in classifiers:
+    # Cross-validation
+    cv_scores = cross_val_score(classifier, X_train, y_train, cv=5)
+
+    # Compute evaluation metrics
+    accuracy = cv_scores.mean()
+    precision = precision_score(y_test, classifier.predict(X_test))
+    recall = recall_score(y_test, classifier.predict(X_test))
+    f1 = f1_score(y_test, classifier.predict(X_test))
+    
+    # Print the results
+    print('Classifier: ', str(classifier))
+    print('Accuracy: ', accuracy)
+    print('Precision: ', precision)
+    print('Recall: ', recall)
+    print('F1-Score: ', f1)
+```
+
+```{python}
+
 ```
