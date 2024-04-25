@@ -42,7 +42,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
-
+from scipy.stats import chi2_contingency
 import warnings
 # Ignore all warnings
 warnings.filterwarnings("ignore")
@@ -64,6 +64,162 @@ print(distinct_data_types)
 # Display the first few rows to understand the structure of the dataset
 print('First few rows of the crash data: \n', crash_data.head())
 ```
+
+
+### Question 1 
+
+
+
+```{python}
+#| label: summary statistics for numerical variables
+
+
+print(crash_data.describe())
+
+
+# Check for missing values in key columns
+print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
+
+
+
+
+```
+
+
+```{python}
+#| label: Handling-missing-and-duplicate-rows
+
+
+# Impute missing values for 'Age of Driver using median
+crash_data['Age'].fillna(crash_data['Age'].median(), inplace=True)
+
+
+# Since the missing values for Light, Weather, and Road Conditions are minimal, we'll impute these with the mode
+common_light = crash_data['Light Conditions'].mode()[0]
+common_weather = crash_data['Weather Conditions'].mode()[0]
+common_road_surface = crash_data['Road Surface Condition'].mode()[0]
+
+
+crash_data['Light Conditions'].fillna(common_light, inplace=True)
+crash_data['Weather Conditions'].fillna(common_weather, inplace=True)
+crash_data['Road Surface Condition'].fillna(common_road_surface, inplace=True)
+
+
+# Confirm changes by checking missing values again
+print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
+
+
+```
+
+
+```{python}
+#| label: Define age groups for easier analysis
+
+
+bins = [0, 18, 25, 40, 55, 70, 100]
+labels = ['0-18', '19-25', '26-40', '41-55', '56-70', '71+']
+crash_data['Age Group'] = pd.cut(crash_data['Age'], bins=bins, labels=labels, right=False)
+
+
+```
+
+
+```{python}
+#| label: Visualization of age group and crash severity
+
+
+plt.figure(figsize=(12, 6))
+sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')
+plt.title('Crash Severity Distribution by Driver Age Group')
+plt.xlabel('Age Group  Driver')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Severity')
+plt.show()
+
+
+```
+
+
+```{python}
+#| label: Visualizations for crash severity and Light Conditions
+
+
+plt.figure(figsize=(14, 7))
+sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
+plt.title('Crash Severity by Light Conditions')
+plt.xlabel('Light Conditions')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=45)
+plt.show()
+
+
+```
+
+
+```{python}
+#| label: Visualizations for crash severity and weather Conditions
+
+
+plt.figure(figsize=(14, 7))
+sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
+plt.title('Crash Severity by Weather Conditions')
+plt.xlabel('Weather Conditions')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=45) 
+plt.show()
+
+
+```
+
+
+```{python}
+#| label: Visualizations for crash severity and road surface Conditions
+
+
+plt.figure(figsize=(14, 7))
+sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='viridis')
+plt.title('Crash Severity by Road Surface Condition')
+plt.xlabel('Road Surface Condition')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=45) 
+plt.show()
+
+
+```
+
+
+```{python}
+#| label: Visualizations for number of crashes by Age Group and Light Conditions
+
+
+plt.figure(figsize=(14, 7))
+sns.countplot(x='Age Group', hue='Light Conditions', data=crash_data, palette='coolwarm')
+plt.title('Impact of Light Conditions on number of crashes by Age Group')
+plt.xlabel('Age Group')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Light Conditions')
+plt.show()
+
+
+```
+
+
+```{python}
+#| label: testing association between Light Conditions and Crash Severity within an Age Group
+
+
+contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] == '19-25']['Crash Severity'],
+                               columns=crash_data[crash_data['Age Group'] == '19-25']['Light Conditions'])
+chi2, p_value, dof, expected = chi2_contingency(contingency_table)
+print(f"Chi-square test p-value for 19-25 age group and light conditions: {p_value}")
+
+
+```
+
+
 
 
 ### Question 2:
