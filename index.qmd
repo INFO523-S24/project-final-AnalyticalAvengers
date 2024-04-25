@@ -23,6 +23,7 @@ jupyter: python3
 
 Add project abstract here.
 
+
 ```{python}
 #| label: load-pkgs
 #| echo: false
@@ -159,6 +160,43 @@ plt.show()
 
 
 ```{python}
+
+# Heatmap of lighting affecting the severity of danger in different age groups
+
+# Categorizing age groups
+def agegroups(age):
+    if age < 20:
+        return 'Under 20'
+    elif 20 <= age <= 25:
+        return '20-25'
+    elif 25 <= age <= 35:
+        return '25-35'
+    elif 35 <= age <= 50:
+        return '35-50'    
+    else:
+        return '60 and above'
+
+crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+
+# summarizing data using a pivot table
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Light Conditions', aggfunc='count')
+
+# Normalize pivot table
+norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
+plt.figure(figsize=(10, 6))
+
+sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
+plt.title('Heatmap of how lighting plays a factor for certain age groups being in more danger:')
+plt.xlabel('Light Conditions')
+plt.ylabel('Age Group')
+plt.show()
+
+
+```
+
+
+
+```{python}
 #| label: Visualizations for crash severity and weather Conditions
 
 
@@ -176,18 +214,102 @@ plt.show()
 
 
 ```{python}
+# heatmap for weather conditions affecting severity of crashes for certain age groups
+
+# Categorizing age groups
+def agegroups(age):
+    if age < 20:
+        return 'Under 20'
+    elif 20 <= age <= 45:
+        return '20-25'
+    elif 45 <= age <= 60:
+        return '25-35'
+    elif 35 <= age <= 50:
+        return '35-50'    
+    else:
+        return '60 and above'
+
+# Categorizing weather conditions
+def weathergroups(weather):
+    if weather in ['Blowing sand, snow', 'Blowing sand, snow/Snow', 'Clear/Snow', 'Cloudy/Blowing sand, snow', 'Other/Snow']:
+        return 'Snowy conditions'
+    elif weather in ['Clear/Rain', 'Fog, smog, smoke/Rain', 'Rain/Blowing sand, snow', 'Rain/Fog, smog, smoke', 'Rain/Severe crosswinds', 'Rain/Unknown']:
+        return 'Rainy/foggy conditions'
+    elif weather in ['Snow/Clear', 'Snow/Rain', 'Snow/Snow']:
+        return 'Mostly Snowy'
+    elif weather in ['Clear/Clear', 'Unknown/Clear']:
+        return 'Clear weather'
+    elif weather in ['Cloudy/Blowing sand, snow', 'Cloudy/Fog, smog, smoke', 'Cloudy/Severe crosswinds', 'Cloudy/Unknown']:
+        return 'Cloudy/smog conditions'
+    elif weather in ['Sleet, hail(freezing rain or drizzle)', 'Sleet, hail(freezing rain or drizzle)/Fog, smog, smoke', 'Sleet, hail(freezing rain or drizzle)/Severe crosswinds', 'Sleet, hail(freezing rain or drizzle)/Unknown']:
+        return 'Hail/Freezing Drizzle'
+
+
+crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+
+crash_data['Weather Group'] = crash_data['Weather Conditions'].apply(weathergroups)
+
+
+# summarizing data using a pivot table
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Weather Group', aggfunc='count')
+
+# Normalize pivot table
+norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
+
+plt.figure(figsize=(10, 6))
+sns.heatmap(norm_pivot, cmap='plasma', annot=True, fmt=".2f", linewidths=.5)
+plt.title('Heatmap of how weather plays a factor for certain age groups being in more danger:')
+plt.xlabel('Weather Conditions')
+plt.ylabel('Age Group')
+plt.show()
+
+```
+
+```{python}
 #| label: Visualizations for crash severity and road surface Conditions
 
 
-plt.figure(figsize=(14, 7))
+plt.figure(figsize=(7, 4))
 sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='viridis')
 plt.title('Crash Severity by Road Surface Condition')
 plt.xlabel('Road Surface Condition')
 plt.ylabel('Number of Crashes')
 plt.legend(title='Crash Severity')
-plt.xticks(rotation=45) 
+plt.xticks(rotation=60) 
 plt.show()
 
+
+```
+
+```{python}
+
+# Categorizing age groups
+def agegroups(age):
+    if age < 20:
+        return 'Under 20'
+    elif 20 <= age <= 25:
+        return '20-25'
+    elif 25 <= age <= 35:
+        return '25-35'
+    elif 35 <= age <= 50:
+        return '35-50'    
+    else:
+        return '60 and above'
+
+crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+
+# summarizing data using a pivot table
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Road Surface Condition', aggfunc='count')
+
+# Normalize pivot table
+norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
+plt.figure(figsize=(10, 6))
+
+sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
+plt.title('Heatmap of how Road surfaces play a factor for certain age groups being in more danger:')
+plt.xlabel('Road Surface Condition')
+plt.ylabel('Age Group')
+plt.show()
 
 ```
 
@@ -196,7 +318,7 @@ plt.show()
 #| label: Visualizations for number of crashes by Age Group and Light Conditions
 
 
-plt.figure(figsize=(14, 7))
+plt.figure(figsize=(9, 6))
 sns.countplot(x='Age Group', hue='Light Conditions', data=crash_data, palette='coolwarm')
 plt.title('Impact of Light Conditions on number of crashes by Age Group')
 plt.xlabel('Age Group')
