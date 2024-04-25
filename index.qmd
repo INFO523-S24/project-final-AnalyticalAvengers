@@ -334,10 +334,10 @@ plt.show()
 #| label: testing association between Light Conditions and Crash Severity within an Age Group
 
 
-contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] == '19-25']['Crash Severity'],
-                               columns=crash_data[crash_data['Age Group'] == '19-25']['Light Conditions'])
-chi2, p_value, dof, expected = chi2_contingency(contingency_table)
-print(f"Chi-square test p-value for 19-25 age group and light conditions: {p_value}")
+#contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] #== '19-25']['Crash Severity'],
+                               #columns=crash_data[crash_data['Age Group'] #== '19-25']['Light Conditions'])
+#chi2, p_value, dof, expected = chi2_contingency(contingency_table)
+#print(f"Chi-square test p-value for 19-25 age group and light conditions: #{p_value}")
 
 
 ```
