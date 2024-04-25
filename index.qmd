@@ -40,7 +40,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 import numpy as np
 from scipy.stats import chi2_contingency
 import warnings
@@ -403,22 +404,23 @@ print("Shape of y_test:", y_test.shape)
 log_reg = LogisticRegression(solver = 'liblinear', max_iter = 1000, random_state = 42)
 log_reg.fit(X_train, y_train)
 
-#dtree = DecisionTreeClassifier()
-#dtree.fit(X_train, y_train)
+dtree = DecisionTreeClassifier()
+dtree.fit(X_train, y_train)
 
-#rf_classifier = RandomForestClassifier()
-#rf_classifier.fit(X_train, y_train)
+rf_classifier = RandomForestClassifier()
+rf_classifier.fit(X_train, y_train)
 
-#knn = KNeighborsClassifier(n_neighbors = 5)
-#knn.fit(X_train, y_train)
+knn = KNeighborsClassifier(n_neighbors = 5)
+knn.fit(X_train, y_train)
 ```
+
 
 ```{python}
 # Model Validation
 
 # List of classifiers
-#classifiers = [log_reg, dtree, rf_classifier, knn]
-classifiers = [log_reg]
+classifiers = [log_reg, dtree, rf_classifier, knn]
+# classifiers = [log_reg]
 
 # Perform cross-validation and compute evaluation metrics for each classifier
 for classifier in classifiers:
@@ -440,5 +442,107 @@ for classifier in classifiers:
 ```
 
 ```{python}
+probs_knn = knn.predict_proba(X_test)
+# Keep probabilities for the positive outcome only
+probs_knn = probs_knn[:, 1]
+# Compute the ROC curve
+fpr_knn, tpr_knn, thresholds = roc_curve(y_test, probs_knn)
+roc_auc_knn = auc(fpr_knn, tpr_knn)
 
+probs_forest = rf_classifier.predict_proba(X_test)
+probs_forest = probs_forest[:, 1]
+fpr_forest, tpr_forest, thresholds = roc_curve(y_test, probs_forest)
+roc_auc_forest = auc(fpr_forest, tpr_forest)
+
+
+probs_tree = dtree.predict_proba(X_test)
+probs_tree = probs_tree[:, 1]
+fpr_tree, tpr_tree, thresholds = roc_curve(y_test, probs_tree)
+roc_auc_tree = auc(fpr_tree, tpr_tree)
+
+
+probs_log = log_reg.predict_proba(X_test)
+probs_log = probs_log[:, 1]
+fpr_log, tpr_log, thresholds = roc_curve(y_test, probs_log)
+roc_auc_log = auc(fpr_log, tpr_log)
+```
+
+```{python}
+plt.figure(figsize=(8, 6))
+plt.plot(fpr_knn, tpr_knn, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc_knn:.2f}) for KNN')
+plt.plot(fpr_tree, tpr_tree, color='blue', lw=2, label=f'ROC curve (area = {roc_auc_tree:.2f}) for Decision Tree')
+plt.plot(fpr_forest, tpr_forest, color='red', lw=2, label=f'ROC curve (area = {roc_auc_forest:.2f}) for Random Forest')
+plt.plot(fpr_log, tpr_log, color='Green', lw=2, label=f'ROC curve (area = {roc_auc_log:.2f}) for Logistic Regression')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')  # Diagonal 45 degree line
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
+```
+
+
+
+
+```{python}
+### Accuracy on Test data
+
+predictions_log = log_reg.predict(X_test)
+print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
+
+predictions_tree = dtree.predict(X_test)
+print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
+
+predictions_forest = rf_classifier.predict(X_test)
+print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
+
+
+predictions_knn = knn.predict(X_test)
+print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
+
+
+```
+
+
+```{python}
+## Confusion Matrix
+cm = confusion_matrix(y_test, predictions_log)
+sns.heatmap(cm, annot = True, fmt = 'g')
+plt.title('Logistic Regression Confusion Matrix')
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+plt.show()
+```
+
+```{python}
+## Confusion Matrix
+cm = confusion_matrix(y_test, predictions_knn)
+sns.heatmap(cm, annot = True, fmt ='g')
+plt.title('KNN Confusion Matrix') 
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+plt.show()
+
+```
+
+```{python}
+cm = confusion_matrix(y_test, predictions_tree)
+sns.heatmap(cm, annot = True, fmt = 'g')
+plt.title('Decision Tree Confusion Matrix')
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+plt.show()
+
+```
+
+```{python}
+
+cm = confusion_matrix(y_test, predictions_forest)
+sns.heatmap(cm, annot = True, fmt = 'g')
+plt.title('Random Forest Confusion Matrix')
+plt.ylabel('Actual label')
+plt.xlabel('Predicted label')
+plt.show()
 ```
