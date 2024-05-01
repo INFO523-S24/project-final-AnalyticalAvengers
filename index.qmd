@@ -23,7 +23,6 @@ jupyter: python3
 
 Add project abstract here.
 
-
 ```{python}
 #| label: load-pkgs
 #| echo: false
@@ -67,10 +66,7 @@ print(distinct_data_types)
 print('First few rows of the crash data: \n', crash_data.head())
 ```
 
-
-### Question 1 
-
-
+### Question 1
 
 ```{python}
 #| label: summary statistics for numerical variables
@@ -86,7 +82,6 @@ print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface
 
 
 ```
-
 
 ```{python}
 #| label: Handling-missing-and-duplicate-rows
@@ -113,7 +108,6 @@ print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface
 
 ```
 
-
 ```{python}
 #| label: Define age groups for easier analysis
 
@@ -124,7 +118,6 @@ crash_data['Age Group'] = pd.cut(crash_data['Age'], bins=bins, labels=labels, ri
 
 
 ```
-
 
 ```{python}
 #| label: Visualization of age group and crash severity
@@ -141,7 +134,6 @@ plt.show()
 
 ```
 
-
 ```{python}
 #| label: Visualizations for crash severity and Light Conditions
 
@@ -157,7 +149,6 @@ plt.show()
 
 
 ```
-
 
 ```{python}
 
@@ -194,8 +185,6 @@ plt.show()
 
 ```
 
-
-
 ```{python}
 #| label: Visualizations for crash severity and weather Conditions
 
@@ -211,7 +200,6 @@ plt.show()
 
 
 ```
-
 
 ```{python}
 # heatmap for weather conditions affecting severity of crashes for certain age groups
@@ -313,7 +301,6 @@ plt.show()
 
 ```
 
-
 ```{python}
 #| label: Visualizations for number of crashes by Age Group and Light Conditions
 
@@ -329,7 +316,6 @@ plt.show()
 
 ```
 
-
 ```{python}
 #| label: testing association between Light Conditions and Crash Severity within an Age Group
 
@@ -341,9 +327,6 @@ plt.show()
 
 
 ```
-
-
-
 
 ### Question 2:
 
@@ -536,7 +519,6 @@ knn = KNeighborsClassifier(n_neighbors = 5)
 knn.fit(X_train, y_train)
 ```
 
-
 ```{python}
 # Model Validation
 
@@ -605,9 +587,6 @@ plt.legend(loc="lower right")
 plt.show()
 ```
 
-
-
-
 ```{python}
 ### Accuracy on Test data
 
@@ -626,7 +605,6 @@ print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
 
 
 ```
-
 
 ```{python}
 ## Confusion Matrix
