@@ -2,8 +2,8 @@
 title: "ANALYTICAL AVENGERS"
 subtitle: "INFO 523 - Project Final"
 author: 
-  - name: "ANALYTICAL AVENGERS-<br>
-    MELIKA AKBARSHARIFI, Divya liladhar Dhole, Mohammad Ali Farmani,<br> H M Abdul Fattah, Gabriel Gedaliah Geffen, Tanya George, Sunday Usman "
+  - name: "ANALYTICAL AVENGER:-<br>
+    Melika Akbarsharifi, Divya liladhar Dhole, Mohammad Ali Farmani,<br> H M Abdul Fattah, Gabriel Gedaliah Geffen, Tanya George, Sunday Usman "
     affiliations:
       - name: "School of Information, University of Arizona"
 description: "Project description"
@@ -15,7 +15,6 @@ format:
 editor: visual
 execute:
   warning: false
-  echo: false
 jupyter: python3
 ---
 
@@ -70,42 +69,50 @@ warnings.filterwarnings("ignore")
 ```
 
 ```{python}
+#| label: load-data
+#| echo: false
+
 # Read in the data
 url = 'data/crash_data.csv'
 crash_data = pd.read_csv(url)
 ```
 
 ```{python}
-# Get the distinct data types of features in the DataFrame
-distinct_data_types = crash_data.dtypes.unique()
+#| label: data-overview
+#| echo: false
 
-print("Distinct data types of features in crash_data:")
-print(distinct_data_types)
+# Get the count of each data type in the DataFrame
+data_type_counts = crash_data.dtypes.value_counts()
+
+print("Count of each data type in the DataFrame:")
+print(data_type_counts)
+print()
 
 # Display the first few rows to understand the structure of the dataset
-print('First few rows of the crash data: \n', crash_data.head())
+crash_data.head()
 ```
 
 ### Question 1
 
 ```{python}
-#| label: summary statistics for numerical variables
+#| label: summary-stats-for-numerical-variables
+#| echo: false
 
-
-print(crash_data.describe())
-
-
-# Check for missing values in key columns
-print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
-
-
-
-
+# Display data summary stats
+crash_data.describe()
 ```
 
 ```{python}
-#| label: Handling-missing-and-duplicate-rows
+#| label: Check-for-missing-values-in-key-columns
+#| echo: false
 
+# Check for missing values in key columns
+print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
+```
+
+```{python}
+#| label: Handling-missing-and-duplicate-rows-of-key-columns
+#| echo: false
 
 # Impute missing values for 'Age of Driver using median
 crash_data['Age'].fillna(crash_data['Age'].median(), inplace=True)
@@ -125,23 +132,21 @@ crash_data['Road Surface Condition'].fillna(common_road_surface, inplace=True)
 # Confirm changes by checking missing values again
 print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
 
-
 ```
 
 ```{python}
-#| label: Define age groups for easier analysis
-
+#| label: Define-age-groups-for-easier-analysis
+#| echo: false
 
 bins = [0, 18, 25, 40, 55, 70, 100]
 labels = ['0-18', '19-25', '26-40', '41-55', '56-70', '71+']
 crash_data['Age Group'] = pd.cut(crash_data['Age'], bins=bins, labels=labels, right=False)
 
-
 ```
 
 ```{python}
-#| label: Visualization of age group and crash severity
-
+#| label: Visualization-of-age-group-and-crash-severity
+#| echo: false
 
 plt.figure(figsize=(12, 6))
 sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')
@@ -151,12 +156,11 @@ plt.ylabel('Number of Crashes')
 plt.legend(title='Severity')
 plt.show()
 
-
 ```
 
 ```{python}
-#| label: Visualizations for crash severity and Light Conditions
-
+#| label: Visualizations-for-crash-severity-and-light-conditions
+#| echo: false
 
 plt.figure(figsize=(14, 7))
 sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
@@ -171,8 +175,8 @@ plt.show()
 ```
 
 ```{python}
-
-# Heatmap of lighting affecting the severity of danger in different age groups
+#| label: Heatmap-of-lighting-affecting-severity-of-danger-by-age-groups
+#| echo: false
 
 # Categorizing age groups
 def agegroups(age):
@@ -202,12 +206,11 @@ plt.xlabel('Light Conditions')
 plt.ylabel('Age Group')
 plt.show()
 
-
 ```
 
 ```{python}
-#| label: Visualizations for crash severity and weather Conditions
-
+#| label: Visualizations-for-crash-severity-and-weather-Conditions
+#| echo: false
 
 plt.figure(figsize=(14, 7))
 sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
@@ -222,7 +225,8 @@ plt.show()
 ```
 
 ```{python}
-# heatmap for weather conditions affecting severity of crashes for certain age groups
+#| label: Heatmap-for-weather-by-severity-and-age
+#| echo: false
 
 # Categorizing age groups
 def agegroups(age):
@@ -274,8 +278,8 @@ plt.show()
 ```
 
 ```{python}
-#| label: Visualizations for crash severity and road surface Conditions
-
+#| label: Visualizations-for-crash-severity-and-road-surface-conditions
+#| echo: false
 
 plt.figure(figsize=(7, 4))
 sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='viridis')
@@ -290,6 +294,8 @@ plt.show()
 ```
 
 ```{python}
+#| label: Heatmap-for-road-surface-condition-by-severity-and-age
+#| echo: false
 
 # Categorizing age groups
 def agegroups(age):
@@ -322,8 +328,7 @@ plt.show()
 ```
 
 ```{python}
-#| label: Visualizations for number of crashes by Age Group and Light Conditions
-
+#| label: Visualizations-for-number-of-crashes-by-age-and-Light-Conditions
 
 plt.figure(figsize=(9, 6))
 sns.countplot(x='Age Group', hue='Light Conditions', data=crash_data, palette='coolwarm')
@@ -376,7 +381,8 @@ print(severity_counts)
 ```
 
 ```{python}
-# Indetify & Visualize relationships between features and the target variable 'feature_variable'
+#| label: visualize-relationship-between-feature-and-target-variable
+#| echo: false
 
 # Instead of using all the features, I am using custom_feature_set 
 # for simplicity with 3 most correlated features and 2 least correlated features
@@ -403,8 +409,8 @@ plt.show()
 ```
 
 ```{python}
-# Data Cleaning
-# Analysis of Missing Values
+#| label: Data-cleaning-and-missing-value-analysis
+#| echo: false
 
 # Find numerical columns
 numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
@@ -448,6 +454,9 @@ crash_data = crash_data.drop(columns_to_drop, axis=1)
 ```
 
 ```{python}
+#| label: Missing-value-imputation
+#| echo: false
+
 all_columns = crash_data.select_dtypes(include = ['int64', 'float64', 'object', 'category'])
 
 # Calculate mode for each categorical column
@@ -460,7 +469,8 @@ print(crash_data.head())
 ```
 
 ```{python}
-# Standardize features with StandardScaler
+#| label: Standardize-features-with-StandardScaler
+#| echo: false
 
 numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64']).columns
 
@@ -478,6 +488,9 @@ print(crash_data.head())
 ```
 
 ```{python}
+#| label: Encoding-categorical-variables
+#| echo: false
+
 # Encode categorical variables
 categorical_columns = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()
 
