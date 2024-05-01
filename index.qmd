@@ -350,7 +350,15 @@ plt.show()
 
 ### Question 2:
 
+The initial analysis from question 1 yielded interesting insights into the relationship between age and crash severity, along with environmental factors like lighting, weather, and road conditions. These findings help identify which age groups are most at risk and the circumstances that contribute to severe crashes. Given these insights, we now move to question 2, where the goal is to create a predictive model to classify crash severity.
+
+To start, we need to preprocess the crash data by filtering out rows where the severity is unknown. Next, we create a binary variable to distinguish crashes with "no injury" (property damage only) from those involving injuries or fatalities. This step is crucial due to the heavy imbalance of fatal crashes, which are relatively rare. This binary classification allows for a more straightforward modeling approach, focusing on predicting the likelihood of crashes resulting in injury or fatality. Below, we create a table to display the count of no-injury crashes and injury/fatality crashes to understand the distribution of our target variable.
+
 ```{python}
+#| label: Create-binary-feature-variable
+#| code-fold: true
+
+
 # Filter rows where the severity is unknow
 crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
 
@@ -359,6 +367,12 @@ crash_data['feature_variable'] = [0 if x == 'Property damage only (none injured)
 
 # Drop the 'Crash Severity' column
 crash_data = crash_data.drop('Crash Severity', axis=1)
+
+# Create a count table for the new feature variable
+severity_counts = crash_data['feature_variable'].value_counts().rename({0: 'No Injury', 1: 'Injury/Fatality'})
+
+# Display the count table
+print(severity_counts)
 ```
 
 ```{python}
