@@ -21,7 +21,7 @@ jupyter: python3
 
 ## Abstract
 
-Add project abstract here.
+This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a 100% prediction accuracy, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
 
 ```{python}
 #| label: load-pkgs
