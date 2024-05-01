@@ -1,15 +1,17 @@
 ---
 title: "Project title"
 subtitle: "INFO 523 - Spring 2023 - Project Final"
-author: "Author names"
+author: "Team Analytical Avengers- Mohammad Ali Farmani, Melika Akbarsharifi, H M Abdul Fattah, Tanya Evita George, Gabriel Gedaliah Geffen, Sunday Usman, Divya Liladhar Dhole"
 title-slide-attributes:
-  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
+  data-background-image: images/car_bg1.jpeg
   data-background-size: stretch
   data-background-opacity: "0.7"
   data-slide-number: none
 format:
   revealjs:
-    theme:  ['data/customtheming.scss']
+    theme:  [white, 'data/customtheming.scss']
+    transition: slide
+    background-transition: fade
   
 editor: visual
 jupyter: python3
@@ -50,6 +52,52 @@ mtcars['speed'] = mtcars['horsepower'] / mtcars['weight']
 
 penguins = sns.load_dataset('penguins').dropna()
 ```
+
+# Introduction to the dataset
+
+# 
+
+-   This dataset has been sourced from the official website of the Massachusetts Registry of Motor Vehicles.
+-   The dataset is a compilation of car crash information from January 2024, Massachussets and it comprises of totally 72 dimensions.
+-   Using important variables such as- Crash Number, Crash Severity, City/Town Name, Age of Driver etc. we analyze how different ages of driver can affect or play a factor in the severity of car crashes and accidents.
+
+## Question 1:
+
+Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger?
+
+## Plots for question 1
+
+::: panel-tabset
+#### Plot A
+
+![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   
+
+-   
+
+-   
+:::
+
+## Question 2:
+
+Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
+
+## Plots for question 2
+
+::: panel-tabset
+#### Plot A
+
+#### Insights
+
+-   
+
+-   
+
+-   
+:::
 
 # Using Quarto for presentations
 
