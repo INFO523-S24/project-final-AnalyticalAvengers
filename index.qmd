@@ -23,6 +23,26 @@ jupyter: python3
 
 This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a 100% prediction accuracy, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
 
+## Introduction
+
+Understanding the factors contributing to severe car crashes is crucial for improving road safety and reducing traffic-related injuries and fatalities. This project aims to develop a predictive model that correlates age demographics with severe crashes in Massachusetts. The ultimate goal is to identify key risk factors and provide data-driven insights for implementing effective safety measures.
+
+Our team is analyzing a comprehensive dataset of car crashes from January 2024, collected from the Massachusetts Registry of Motor Vehicles. This dataset comprises 72 dimensions, encompassing a range of variables, including crash characteristics, driver demographics, environmental conditions, and vehicle information. By examining these variables, we seek to uncover patterns that link age with severe crashes, offering valuable insights into potential high-risk groups and circumstances.
+
+Our analysis focuses on two main research questions: identifying the age groups most at risk for severe crashes and exploring the role of environmental factors such as lighting, weather, road conditions, and speed limits. Additionally, we aim to develop a predictive model capable of classifying crash severity based on these variables. To achieve this, we used multiple binary classification models, which are known for their simplicity and effectiveness in classification tasks.
+
+The methodology for our analysis involved several key steps. First, we pre-processed the dataset to handle missing data, standardize categorical variables, and scale numerical features. Next, we conducted exploratory data analysis to identify significant correlations and patterns. To predict crash severity, we trained a KNN model using a subset of the data and evaluated its performance on a separate test set. The model's accuracy, precision, recall, and F1-score were measured to determine its effectiveness. The high accuracy achieved in the model's predictions indicates its potential for real-world application in road safety.
+
+This report details our approach to analyzing the Massachusetts crash dataset, including the steps taken to process the data, build the predictive model, and evaluate its performance. We discuss our findings and provide insights into which age groups are most at risk, along with the environmental factors that contribute to severe crashes. Through this work, we aim to contribute to road safety practices and provide useful information for policymakers, traffic safety professionals, and other stakeholders interested in reducing traffic-related incidents and enhancing public safety.
+
+## Questions
+
+1. Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger?
+2. Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
+
+## Analysis Plan
+
+
 ```{python}
 #| label: load-pkgs
 #| echo: false
