@@ -20,7 +20,7 @@ jupyter: python3
 
 ## Abstract
 
-This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a 100% prediction accuracy, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
+This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a prediction accuracy of around 78% in all cases, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
 
 ## Introduction
 
@@ -363,7 +363,6 @@ To start, we need to preprocess the crash data by filtering out rows where the s
 #| label: Create-binary-feature-variable
 #| code-fold: true
 
-
 # Filter rows where the severity is unknow
 crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
 
@@ -380,46 +379,204 @@ severity_counts = crash_data['feature_variable'].value_counts().rename({0: 'No I
 print(severity_counts)
 ```
 
+With the target variable established, it is important to explore its relationships with a specific set of feature variables. These variables were chosen based on preliminary analysis and fundamental concepts in traffic engineering, recognizing that certain factors are closely associated with crash severity.
+
+- Speed Limit: Known to be correlated with crash severity.
+- Light Conditions: Affects visibility and safety.
+- Weather Conditions: Influences road conditions and crash likelihood.
+- Road Surface Condition: Determines traction and safety.
+- Roadway Junction Type: Indicates types of intersections and their risks.
+- Traffic Control Device Type: Affects traffic flow and safety.
+- Manner of Collision: Describes the nature of crash events.
+- Age: A demographic factor.
+- Sex: Another demographic factor.
+
+The following plots include a correlation matrix and a pair plot. The correlation matrix shows that the numeric variables have little to no correlation with each other, indicating independence between them. The pair plot provides a more detailed visualization of the relationships among the numeric features, helping to identify potential patterns or trends not immediately apparent from the raw data.
+
 ```{python}
-#| label: visualize-relationship-between-feature-and-target-variable
-#| echo: false
+#| label: visualize-relationship-between-numeric-features-and-target-variable
+#| code-fold: true
 
-# Instead of using all the features, I am using custom_feature_set 
-# for simplicity with 3 most correlated features and 2 least correlated features
+# Select certain feature variables based on analysis in Q1 and understanding of traffic engineering
+columns_to_keep = [
+    'feature_variable',
+    'Light Conditions',
+    'Manner of Collision',
+    'Road Surface Condition',
+    'Roadway Junction Type',
+    'Traffic Control Device Type',
+    'Weather Conditions',
+    'Speed Limit',
+    'Age',
+    'Sex'
+]
 
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+# Create the subset from the crash_data DataFrame
+model_crash_data = crash_data[columns_to_keep]
 
-correlation_matrix = numerical_cols.corr()
 
-# The correlation of each feature with the target variable 'mc_preschool'
-correlation_with_target = correlation_matrix['feature_variable'].abs().sort_values(ascending=False)
+# Select only numerical columns to create a subset
+numerical_crash_data = model_crash_data.select_dtypes(include=['int64', 'float64'])
 
-most_correlated_features = correlation_with_target[1:4]  # Exclude the target variable itself
-least_correlated_features = correlation_with_target[-2:] 
+# Now create the correlation matrix with the subset
+correlation_matrix = numerical_crash_data.corr()
 
-# Convert the indices of selected features to a list and merge them together
-most_correlated_features = most_correlated_features.index.tolist()
-least_correlated_features = least_correlated_features.index.tolist()
-custom_feature_set = most_correlated_features + least_correlated_features
+# Create a heatmap for the correlation matrix
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Correlation Matrix Heatmap")
+plt.show()
 
-# Visualize relationships between the custom feature set and the target variable using a pairplot
-sns.pairplot(numerical_cols, x_vars=custom_feature_set, y_vars='feature_variable', kind='scatter')
+# Create a pairplot for the numerical subset
+sns.pairplot(numerical_crash_data)
+plt.title("Pairplot for Numerical Columns")
 plt.show()
 
 ```
 
+Following this, the report includes bar plots for each of the categorical columns and their relationships with the feature variables. These plots serve to highlight the distribution of the categorical data, offering a clearer understanding of how these features relate to the target variable. This analysis aims to uncover meaningful patterns that can guide further investigations and inform safety measures in traffic engineering.
+
+```{python}
+#| label: visualize-relationship-between-categorical-features-and-target-variable
+#| code-fold: true
+
+# Perform minor feature engineering for variables with excessive options
+
+# Create a mapping for the "Sex" column
+sex_mapping = {
+    "F - Female": "F",
+    "M - Male": "M",
+    "U - Unknown": "U",
+    "X - Non-Binary": "X"
+}
+
+# Apply the mapping to the "Sex" column
+model_crash_data["Sex"] = model_crash_data["Sex"].map(sex_mapping)
+
+# Define the age bins and labels
+age_bins = [0, 16, 17, 20, 24, 34, 44, 54, 64, 74, 84, 200]
+age_labels = ["<16", "16-17", "18-20", "21-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", ">84"]
+
+# Apply binning to the "Age" column
+model_crash_data["Age"] = pd.cut(model_crash_data["Age"], bins=age_bins, labels=age_labels, right=False)
+
+# Mapping from original weather conditions to simplified categories
+weather_mapping = {
+    # Clear weather
+    "Clear": "Clear",
+    "Clear/Clear": "Clear",
+    "Clear/Cloudy": "Clear",
+    "Clear/Other": "Clear",
+    "Clear/Unknown": "Clear",
+    "Clear/Snow": "Clear",
+    "Clear/Rain": "Clear",
+    "Clear/Blowing sand, snow": "Clear",
+
+    # Cloudy weather
+    "Cloudy": "Cloudy",
+    "Cloudy/Cloudy": "Cloudy",
+    "Cloudy/Clear": "Cloudy",
+    "Cloudy/Unknown": "Cloudy",
+    "Cloudy/Other": "Cloudy",
+    "Cloudy/Blowing sand, snow": "Cloudy",
+    "Cloudy/Fog, smog, smoke": "Cloudy",
+    
+    # Rain
+    "Rain": "Rain",
+    "Rain/Rain": "Rain",
+    "Rain/Cloudy": "Rain",
+    "Rain/Sleet, hail (freezing rain or drizzle)": "Rain",
+    "Rain/Fog, smog, smoke": "Rain",
+    "Rain/Severe crosswinds": "Rain",
+    "Rain/Other": "Rain",
+    "Rain/Unknown": "Rain",
+    
+    # Snow
+    "Snow": "Snow",
+    "Snow/Snow": "Snow",
+    "Snow/Cloudy": "Snow",
+    "Snow/Clear": "Snow",
+    "Snow/Rain": "Snow",
+    "Snow/Other": "Snow",
+    "Snow/Blowing sand, snow": "Snow",
+    "Snow/Sleet, hail (freezing rain or drizzle)": "Snow",
+    
+    # Sleet, hail
+    "Sleet, hail (freezing rain or drizzle)": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Cloudy": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Severe crosswinds": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Blowing sand, snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Fog, smog, smoke": "Sleet/Hail",
+    
+    # Severe crosswinds and windy conditions
+    "Severe crosswinds": "Windy",
+    "Blowing sand, snow": "Windy",
+    
+    # Fog, smog, smoke
+    "Fog, smog, smoke": "Fog",
+    "Fog, smog, smoke/Cloudy": "Fog",
+    "Fog, smog, smoke/Rain": "Fog",
+    
+    # Other and Unknown
+    "Unknown": "Unknown",
+    "Unknown/Unknown": "Unknown",
+    "Not Reported": "Unknown",
+    "Other": "Other",
+    "Reported but invalid": "Other",
+    "Unknown/Clear": "Unknown",
+    "Unknown/Other": "Unknown",
+}
+
+# Apply the mapping to simplify the "Weather Conditions"
+model_crash_data["Weather Conditions"] = model_crash_data["Weather Conditions"].map(weather_mapping).fillna("Other")
+
+
+# Stacked bar plot for Sex and feature_variable
+sns.countplot(x='Sex', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Sex and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Stacked bar plot for Traffic Control Device Type and feature_variable
+sns.countplot(x='Traffic Control Device Type', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Traffic Control Device Type and feature_variable")
+plt.xticks(rotation=90)
+plt.show()
+
+# Stacked bar plot for Weather Conditions and feature_variable
+sns.countplot(x='Weather Conditions', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Weather Conditions and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Box plot for Age Group and feature_variable
+sns.countplot(x='Age', hue='feature_variable', data=model_crash_data)
+plt.title("Box Plot for Age Group and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Crosstab for Roadway Junction Type and feature_variable
+sns.countplot(x='Roadway Junction Type', hue='feature_variable', data=model_crash_data)
+plt.title("Box Plot for Roadway Junction Type and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+```
+
+In this section, we meticulously examine the dataset for missing values, distinguishing between numerical and categorical columns. Addressing missing data is crucial for ensuring the integrity and reliability of subsequent analyses. By systematically scrutinizing both numerical and categorical columns, we aim to identify any gaps in the dataset and determine the appropriate course of action. This meticulous approach allows us to maintain the quality of the data and make informed decisions regarding data imputation or removal.
+
 ```{python}
 #| label: Data-cleaning-and-missing-value-analysis
-#| echo: false
+#| code-fold: true
 
 # Find numerical columns
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+numerical_cols = model_crash_data.select_dtypes(include = ['int64', 'float64'])
 
 # Calculate missing values count for each numerical column
 missing_values_count = numerical_cols.isnull().sum()
 
 # Calculate missing rate for each numerical column
-missing_rate = (missing_values_count / len(crash_data)) * 100
+missing_rate = (missing_values_count / len(model_crash_data)) * 100
 
 missing_data = pd.DataFrame({
     'Missing Values': missing_values_count,
@@ -430,10 +587,10 @@ print('Analysis of Missing Values for numerical features: \n\n', missing_data, '
 
 # Drop categorical columns with missing rate over 50%
 columns_to_drop = missing_rate[missing_rate > 50].index
-crash_data = crash_data.drop(columns_to_drop, axis=1)
+model_crash_data = model_crash_data.drop(columns_to_drop, axis=1)
 
 # Find categorical columns
-categorical_columns = crash_data.select_dtypes(include = ['object', 'category'])
+categorical_columns = model_crash_data.select_dtypes(include = ['object', 'category'])
 
 # Calculate missing values count for each categorical column
 missing_values_count = categorical_columns.isnull().sum()
@@ -453,97 +610,87 @@ columns_to_drop = missing_rate[missing_rate > 50].index
 crash_data = crash_data.drop(columns_to_drop, axis=1)
 ```
 
-```{python}
-#| label: Missing-value-imputation
-#| echo: false
-
-all_columns = crash_data.select_dtypes(include = ['int64', 'float64', 'object', 'category'])
-
-# Calculate mode for each categorical column
-mode_values = all_columns.mode().iloc[0]
-
-# Fill missing values with mode for each column
-crash_data = crash_data.fillna(mode_values)
-
-print(crash_data.head())
-```
 
 ```{python}
-#| label: Standardize-features-with-StandardScaler
+#| label: Missing-value-removal
 #| echo: false
 
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64']).columns
-
-# Exclude our output feature: 'feature_variable'
-feature_to_exclude = 'feature_variable'
-numerical_cols = numerical_cols.drop(feature_to_exclude, errors='ignore')
-
-scaler = StandardScaler()
-
-# Fit and transform the numerical columns using StandardScaler
-crash_data[numerical_cols] = scaler.fit_transform(crash_data[numerical_cols])
-
-# Display the first few rows of the scaled dataset
-print(crash_data.head())
+# Drop all rows with missing values
+model_crash_data_cleaned = model_crash_data.dropna()
 ```
+
+Given the critical nature of this analysis, handling missing values is a significant concern. The decision was made to remove rows with missing data rather than impute. This choice was driven by the observation that the column with the highest number of missing values had only 8% of its entries missing. By removing these rows, we avoid introducing bias that could arise from imputation, which is a particularly sensitive issue in crash modeling.
+
+Regarding data standardization and encoding, the "Speed Limit" variable was converted to a categorical data type. This decision reflects the fact that speed limits are often discrete and do not behave like continuous numerical variables. Treating them as categorical eliminates the risk of implying linear relationships or gradients where they do not exist.
+
+For other categorical features, such as intersection type and weather conditions, one-hot encoding was employed. This approach was chosen over label encoding because it avoids the implication of ordinality among categorical variables. Label encoding could suggest an inherent order or ranking between categories, which is not appropriate for these types of features.
+
+By using one-hot encoding, we retain the categorical nature of these features while preparing them for use in machine learning models. This step ensures that the encoded data accurately reflects the characteristics of the original dataset without introducing unintended biases.
 
 ```{python}
 #| label: Encoding-categorical-variables
+#| code-fold: true
+
+# Convert "Speed Limit" to a categorical data type
+model_crash_data_cleaned['Speed Limit'] = model_crash_data_cleaned['Speed Limit'].astype('category')
+
+# Select categorical columns
+categorical_columns = model_crash_data_cleaned.select_dtypes(include=['object', 'category']).columns.tolist()
+
+print("Categorical Columns:")
+print(categorical_columns)
+print()
+
+# One-hot encode categorical variables
+crash_data_encoded = pd.get_dummies(model_crash_data_cleaned, columns=categorical_columns, drop_first=True)
+
+print("One-Hot Encoded Data:")
+crash_data_encoded.head()
+
+```
+
+```{python}
+#| label: Define-feature-and-target-variables
 #| echo: false
 
-# Encode categorical variables
-categorical_columns = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()
-
-# Convert numerical columns to strings if necessary
-crash_data[categorical_columns] = crash_data[categorical_columns].astype(str)
-
-# Encode categorical variables
-label_encoders = {col: LabelEncoder() for col in categorical_columns}
-for col in categorical_columns:
-    crash_data[col] = label_encoders[col].fit_transform(crash_data[col])
-
-# Convert categorical columns to numerical using one-hot encoding
-crash_data = pd.get_dummies(crash_data, columns=categorical_columns)
-
-print(crash_data.head())
-```
-
-```{python}
 # Define features and target
-X = crash_data.drop('feature_variable', axis = 1)
-y = crash_data['feature_variable']
+X = crash_data_encoded.drop('feature_variable', axis = 1)
+y = crash_data_encoded['feature_variable']
 ```
 
 ```{python}
-batch_size = 100
+# batch_size = 100
 
-# Initialize an empty array to store the selected feature indices
-selected_feature_indices = []
+# # Initialize an empty array to store the selected feature indices
+# selected_feature_indices = []
 
-# Iterate over the dataset in batches and perform feature selection
-for batch_start in range(0, len(X), batch_size):
-    X_batch = X.iloc[batch_start:batch_start+batch_size]
-    y_batch = y.iloc[batch_start:batch_start+batch_size]
+# # Iterate over the dataset in batches and perform feature selection
+# for batch_start in range(0, len(X), batch_size):
+#     X_batch = X.iloc[batch_start:batch_start+batch_size]
+#     y_batch = y.iloc[batch_start:batch_start+batch_size]
     
-    # Perform feature selection on the current batch
-    k_best_selector = SelectKBest(score_func=f_classif, k=30)
-    X_selected_batch = k_best_selector.fit_transform(X_batch, y_batch)
+#     # Perform feature selection on the current batch
+#     k_best_selector = SelectKBest(score_func=f_classif, k=30)
+#     X_selected_batch = k_best_selector.fit_transform(X_batch, y_batch)
     
-    # Get the indices of the selected features and append to the list
-    selected_feature_indices.extend(k_best_selector.get_support(indices=True))
+#     # Get the indices of the selected features and append to the list
+#     selected_feature_indices.extend(k_best_selector.get_support(indices=True))
 
-# Get the names of the selected features
-selected_features = X.columns[selected_feature_indices]
+# # Get the names of the selected features
+# selected_features = X.columns[selected_feature_indices]
 
-print('Selected features: \n\n', selected_features)
+# print('Selected features: \n\n', selected_features)
 
-# Extract the selected features from the original DataFrame X
-X_selected = X[selected_features]
+# # Extract the selected features from the original DataFrame X
+# X_selected = X[selected_features]
 ```
 
 ```{python}
+#| label: Train-Test-Split
+#| echo: false
+
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Display the shapes of the training and testing sets
 print("Shape of X_train:", X_train.shape)
@@ -553,6 +700,10 @@ print("Shape of y_test:", y_test.shape)
 ```
 
 ```{python}
+#| label: Initializing-the-model
+#| echo: false
+#| output: false
+
 log_reg = LogisticRegression(solver = 'liblinear', max_iter = 1000, random_state = 42)
 log_reg.fit(X_train, y_train)
 
@@ -566,12 +717,18 @@ knn = KNeighborsClassifier(n_neighbors = 5)
 knn.fit(X_train, y_train)
 ```
 
+Following the data preprocessing and encoding steps, the next phase involves defining and evaluating four distinct models: logistic regression, decision tree, random forest, and K-nearest neighbors (KNN). These models represent a range of approaches to classification, from linear methods to ensemble techniques and distance-based algorithms.
+
+To assess the performance of these models, the dataset was split into training and testing sets using an 80/20 ratio, with 80% of the data used for training and 20% for testing. This split allows for robust evaluation of the models' ability to generalize to new data.
+
+Below, we report the results for each model using key metrics: accuracy, precision, recall, and F1 score. These metrics offer a comprehensive view of model performance, highlighting not only the overall accuracy but also the ability to correctly identify positive and negative cases (precision), the rate of true positive predictions (recall), and the balance between precision and recall (F1 score).
+
 ```{python}
-# Model Validation
+#| label: Model-validation
+#| code-fold: true
 
 # List of classifiers
 classifiers = [log_reg, dtree, rf_classifier, knn]
-# classifiers = [log_reg]
 
 # Perform cross-validation and compute evaluation metrics for each classifier
 for classifier in classifiers:
@@ -590,106 +747,148 @@ for classifier in classifiers:
     print('Precision: ', precision)
     print('Recall: ', recall)
     print('F1-Score: ', f1)
+    print()
 ```
 
 ```{python}
-probs_knn = knn.predict_proba(X_test)
-# Keep probabilities for the positive outcome only
-probs_knn = probs_knn[:, 1]
-# Compute the ROC curve
-fpr_knn, tpr_knn, thresholds = roc_curve(y_test, probs_knn)
-roc_auc_knn = auc(fpr_knn, tpr_knn)
+#| label: Compute-ROC-AUC
+#| echo: false
 
+# K-Nearest Neighbors (KNN)
+probs_knn = knn.predict_proba(X_test)  # Get probabilities for KNN
+probs_knn = probs_knn[:, 1]  # Keep probabilities for the positive class
+fpr_knn, tpr_knn, thresholds = roc_curve(y_test, probs_knn)  # Compute ROC curve
+roc_auc_knn = auc(fpr_knn, tpr_knn)  # Calculate AUC for the ROC curve
+
+# Random Forest
 probs_forest = rf_classifier.predict_proba(X_test)
-probs_forest = probs_forest[:, 1]
-fpr_forest, tpr_forest, thresholds = roc_curve(y_test, probs_forest)
-roc_auc_forest = auc(fpr_forest, tpr_forest)
+probs_forest = probs_forest[:, 1]  # Keep probabilities for the positive class
+fpr_forest, tpr_forest, thresholds = roc_curve(y_test, probs_forest)  # ROC curve
+roc_auc_forest = auc(fpr_forest, tpr_forest)  # AUC for Random Forest
 
-
+# Decision Tree
 probs_tree = dtree.predict_proba(X_test)
-probs_tree = probs_tree[:, 1]
-fpr_tree, tpr_tree, thresholds = roc_curve(y_test, probs_tree)
-roc_auc_tree = auc(fpr_tree, tpr_tree)
+probs_tree = probs_tree[:, 1]  # Positive class probabilities
+fpr_tree, tpr_tree, thresholds = roc_curve(y_test, probs_tree)  # ROC curve
+roc_auc_tree = auc(fpr_tree, tpr_tree)  # AUC for Decision Tree
 
-
+# Logistic Regression
 probs_log = log_reg.predict_proba(X_test)
-probs_log = probs_log[:, 1]
-fpr_log, tpr_log, thresholds = roc_curve(y_test, probs_log)
-roc_auc_log = auc(fpr_log, tpr_log)
+probs_log = probs_log[:, 1]  # Probabilities for the positive class
+fpr_log, tpr_log, thresholds = roc_curve(y_test, probs_log)  # ROC curve
+roc_auc_log = auc(fpr_log, tpr_log)  # AUC for Logistic Regression
 ```
 
+To evaluate the performance of our classifiers, we plotted the Receiver Operating Characteristic (ROC) curve and calculated the Area Under the Curve (AUC). The ROC curve helps us understand the trade-off between the True Positive Rate and the False Positive Rate, providing a visual representation of the model's ability to distinguish between classes. A higher AUC value indicates a better-performing model, with a perfect classifier achieving an AUC of 1.
+
+In the following plot, you will see ROC curves for K-Nearest Neighbors, Decision Tree, Random Forest, and Logistic Regression classifiers. Among these models, the Random Forest classifier had the highest AUC, indicating that it was the closest to the top-left corner of the ROC plot, demonstrating strong discriminative ability. This makes Random Forest the most promising model among those tested.
+
 ```{python}
-plt.figure(figsize=(8, 6))
-plt.plot(fpr_knn, tpr_knn, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc_knn:.2f}) for KNN')
-plt.plot(fpr_tree, tpr_tree, color='blue', lw=2, label=f'ROC curve (area = {roc_auc_tree:.2f}) for Decision Tree')
-plt.plot(fpr_forest, tpr_forest, color='red', lw=2, label=f'ROC curve (area = {roc_auc_forest:.2f}) for Random Forest')
-plt.plot(fpr_log, tpr_log, color='Green', lw=2, label=f'ROC curve (area = {roc_auc_log:.2f}) for Logistic Regression')
-plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')  # Diagonal 45 degree line
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
+#| label: Plotting-ROC-AUC
+#| code-fold: true
+
+# Plot ROC curves for different classifiers
+plt.figure(figsize=(8, 6))  # Set the plot size
+
+# ROC curve for KNN with AUC
+plt.plot(fpr_knn, tpr_knn, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc_knn:.2f}) for KNN')
+
+# ROC curve for Decision Tree
+plt.plot(fpr_tree, tpr_tree, color='blue', lw=2, label=f'ROC curve (AUC = {roc_auc_tree:.2f}) for Decision Tree')
+
+# ROC curve for Random Forest
+plt.plot(fpr_forest, tpr_forest, color='red', lw=2, label=f'ROC curve (AUC = {roc_auc_forest:.2f}) for Random Forest')
+
+# ROC curve for Logistic Regression
+plt.plot(fpr_log, tpr_log, color='green', lw=2, label=f'ROC curve (AUC = {roc_auc_log:.2f}) for Logistic Regression')
+
+# Diagonal line representing random guessing
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')  # Random classifier
+
+# Set plot limits and labels
+plt.xlim([0, 1])  # X-axis from 0 to 1 (False Positive Rate)
+plt.ylim([0, 1.05])  # Y-axis from 0 to slightly above 1 (True Positive Rate)
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic (ROC) Curve')
-plt.legend(loc="lower right")
-plt.show()
+plt.title('Receiver Operating Characteristic (ROC) Curve')  # Title
+
+# Display the legend in the lower right corner
+plt.legend(loc='lower right')
+
+# Show the plot
+plt.show() 
 ```
 
 ```{python}
-### Accuracy on Test data
+# ### Accuracy on Test data
 
-predictions_log = log_reg.predict(X_test)
-print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
+# predictions_log = log_reg.predict(X_test)
+# print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
 
-predictions_tree = dtree.predict(X_test)
-print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
+# predictions_tree = dtree.predict(X_test)
+# print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
 
-predictions_forest = rf_classifier.predict(X_test)
-print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
+# predictions_forest = rf_classifier.predict(X_test)
+# print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
 
-
-predictions_knn = knn.predict(X_test)
-print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
-
-
+# predictions_knn = knn.predict(X_test)
+# print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
 ```
 
+To further examine model performance, we turn to confusion matrices, which provide a detailed breakdown of predictions versus actual outcomes. These matrices are particularly useful for identifying issues with class imbalance and evaluating model tendencies.
+
+The confusion matrices presented below reveal a key insight: the models tend to predict 0 (non-severe crashes) far more frequently than 1 (severe crashes). This tendency is a common consequence of imbalanced data, where the majority class overwhelms the minority class. While this approach can yield high accuracy, it often comes at the expense of poor recall and precision, especially for the minority class.
+
+These findings align with the earlier observation that our models, despite high accuracy, often fall short in terms of precision, recall, and F1 score. By examining these confusion matrices, we can better understand how model predictions are skewed and what adjustments might be needed to improve overall performance.
+
 ```{python}
-## Confusion Matrix
+#| label: Confusion-matrices
+#| code-fold: true
+
+# Create a 2x2 grid for the subplots
+fig, axs = plt.subplots(2, 2, figsize=(10, 10))  # Define the grid structure
+
+# Confusion Matrix for Logistic Regression
 cm = confusion_matrix(y_test, predictions_log)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Logistic Regression Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
-```
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 0])  # Plot in the top-left
+axs[0, 0].set_title('Logistic Regression Confusion Matrix')  # Set the title
 
-```{python}
-## Confusion Matrix
+# Confusion Matrix for KNN
 cm = confusion_matrix(y_test, predictions_knn)
-sns.heatmap(cm, annot = True, fmt ='g')
-plt.title('KNN Confusion Matrix') 
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 1])  # Plot in the top-right
+axs[0, 1].set_title('KNN Confusion Matrix')
 
-```
-
-```{python}
+# Confusion Matrix for Decision Tree
 cm = confusion_matrix(y_test, predictions_tree)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Decision Tree Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 0])  # Plot in the bottom-left
+axs[1, 0].set_title('Decision Tree Confusion Matrix')
 
-```
-
-```{python}
-
+# Confusion Matrix for Random Forest
 cm = confusion_matrix(y_test, predictions_forest)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Random Forest Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 1])  # Plot in the bottom-right
+axs[1, 1].set_title('Random Forest Confusion Matrix')
+
+# Set common x and y labels
+for ax in axs.flat:
+    ax.set_ylabel('Actual label')
+    ax.set_xlabel('Predicted label')
+
+# Adjust the layout to prevent overlap
+plt.tight_layout()
+
+# Show the plot with all subplots
 plt.show()
 ```
+
+
+## Discussion of Results & Conclusions
+
+The objective of this project was to analyze the relationship between various features and a target variable to understand crash severity and evaluate the performance of different classifiers. After establishing a set of key feature variables, including 'Speed Limit', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition', 'Roadway Junction Type', 'Traffic Control Device Type', 'Manner of Collision', 'Age', and 'Sex', we proceeded to build and test four machine learning models: Logistic Regression, Decision Tree, Random Forest, and K-Nearest Neighbors (KNN).
+
+While all models achieved an accuracy of approximately 78%, it became evident that accuracy alone wasn't a sufficient measure due to the imbalanced nature of the dataset. This led us to examine additional metrics such as precision, recall, and F1 score, which offer more insights into model performance in the context of class imbalance. These metrics reveal that models tended to predict the majority class (non-severe crashes), yielding high accuracy but low recall and precision for the minority class (severe crashes).
+
+Among the four classifiers, the Random Forest (RF) model demonstrated the best performance. It achieved a higher true positive rate, leading to improved recall, precision, and F1 score compared to other models. This result suggests that RF's ensemble nature and ability to handle diverse data make it particularly effective for this type of analysis.
+
+Despite the promising results with Random Forest, there are several areas for future research and improvement. For instance, additional metrics, such as processing time and resource utilization, could be considered to evaluate model efficiency. Furthermore, addressing class imbalance through resampling techniques or class weights could enhance model accuracy and reliability for the minority class. Exploring different feature engineering approaches, integrating more contextual data, or experimenting with other machine learning algorithms may also yield improved outcomes.
+
+In conclusion, this study highlights the challenges associated with imbalanced data and underscores the importance of considering multiple performance metrics beyond accuracy. Random Forest proved to be a strong candidate for predicting crash severity, but further research and refinement are needed to build more robust and efficient models. Future studies could focus on enhancing recall and precision for minority classes and exploring additional features that contribute to crash dynamics.
