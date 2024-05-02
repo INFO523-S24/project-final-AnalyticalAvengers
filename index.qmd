@@ -820,18 +820,19 @@ plt.show()
 ```
 
 ```{python}
-# ### Accuracy on Test data
+#| label: Make-predictions-for-future-confusion-matrix
+#| echo: false
 
-# predictions_log = log_reg.predict(X_test)
+predictions_log = log_reg.predict(X_test)
 # print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
 
-# predictions_tree = dtree.predict(X_test)
+predictions_tree = dtree.predict(X_test)
 # print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
 
-# predictions_forest = rf_classifier.predict(X_test)
+predictions_forest = rf_classifier.predict(X_test)
 # print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
 
-# predictions_knn = knn.predict(X_test)
+predictions_knn = knn.predict(X_test)
 # print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
 ```
 
