@@ -343,7 +343,7 @@ plt.show()
 
 ```{python}
 #| label: testing association between Light Conditions and Crash Severity within an Age Group
-
+#| echo: false
 
 #contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] #== '19-25']['Crash Severity'],
                                #columns=crash_data[crash_data['Age Group'] #== '19-25']['Light Conditions'])
@@ -659,6 +659,9 @@ y = crash_data_encoded['feature_variable']
 ```
 
 ```{python}
+#| echo: false
+
+
 # batch_size = 100
 
 # # Initialize an empty array to store the selected feature indices
