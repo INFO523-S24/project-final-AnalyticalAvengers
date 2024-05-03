@@ -249,7 +249,7 @@ Additionally, the data shows that older people are significantly more likely to 
 
 ```{python}
 #| label: Visualizations-for-crash-severity-and-weather-Conditions
-#| echo: false
+#| code-fold: true
 
 # Mapping from original weather conditions to simplified categories
 weather_mapping = {
@@ -333,134 +333,82 @@ plt.show()
 
 ```
 
+After filtering and simplifying the weather conditions to six main categories, we can analyze their impact on crash occurrences and severity. As expected, clear weather conditions are associated with the highest number of crashes, and, unsurprisingly, "no injury" is the most common outcome. This pattern aligns with general expectations, as most driving occurs during clear weather, with higher traffic volumes leading to more minor accidents.
+
+Interestingly, the data reveals that snowy conditions are associated with more crashes than cloudy weather, despite cloudy weather likely being more common. This observation suggests that snowy conditions, which often reduce visibility and traction, could increase the likelihood of accidents, even if the overall frequency of such weather is lower. It highlights the unique challenges posed by adverse weather and the potential for more severe accidents in these conditions.
+
+One limitation of this analysis is that it does not account for driving rates during different weather conditions. Without additional data, it's challenging to establish crash rates relative to the frequency of specific weather types. If more comprehensive data were available, it would be possible to calculate crash rates per mile driven or per hour of exposure to provide a more accurate representation of the risks associated with each weather condition.
+
 ```{python}
 #| label: Heatmap-for-weather-by-severity-and-age
-#| echo: false
-
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 45:
-        return '20-25'
-    elif 45 <= age <= 60:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
-
-# Categorizing weather conditions
-def weathergroups(weather):
-    if weather in ['Blowing sand, snow', 'Blowing sand, snow/Snow', 'Clear/Snow', 'Cloudy/Blowing sand, snow', 'Other/Snow']:
-        return 'Snowy conditions'
-    elif weather in ['Clear/Rain', 'Fog, smog, smoke/Rain', 'Rain/Blowing sand, snow', 'Rain/Fog, smog, smoke', 'Rain/Severe crosswinds', 'Rain/Unknown']:
-        return 'Rainy/foggy conditions'
-    elif weather in ['Snow/Clear', 'Snow/Rain', 'Snow/Snow']:
-        return 'Mostly Snowy'
-    elif weather in ['Clear/Clear', 'Unknown/Clear']:
-        return 'Clear weather'
-    elif weather in ['Cloudy/Blowing sand, snow', 'Cloudy/Fog, smog, smoke', 'Cloudy/Severe crosswinds', 'Cloudy/Unknown']:
-        return 'Cloudy/smog conditions'
-    elif weather in ['Sleet, hail(freezing rain or drizzle)', 'Sleet, hail(freezing rain or drizzle)/Fog, smog, smoke', 'Sleet, hail(freezing rain or drizzle)/Severe crosswinds', 'Sleet, hail(freezing rain or drizzle)/Unknown']:
-        return 'Hail/Freezing Drizzle'
-
-
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
-
-crash_data['Weather Group'] = crash_data['Weather Conditions'].apply(weathergroups)
-
+#| code-fold: true
 
 # summarizing data using a pivot table
-pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Weather Group', aggfunc='count')
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Weather Conditions', aggfunc='count')
 
 # Normalize pivot table
 norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
 
 plt.figure(figsize=(10, 6))
-sns.heatmap(norm_pivot, cmap='plasma', annot=True, fmt=".2f", linewidths=.5)
-plt.title('Heatmap of how weather plays a factor for certain age groups being in more danger:')
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=45)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels
+plt.title('Heatmap of Weather Conditions by Age Group')
 plt.xlabel('Weather Conditions')
 plt.ylabel('Age Group')
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
 plt.show()
 
 ```
 
+The heatmap depicting the relationship between age groups and weather conditions provides insights into the frequency and severity of crashes under varying weather circumstances. Notably, the majority of non-fatal crashes occur in clear weather conditions. This observation aligns with the previous finding that clear conditions are associated with the highest overall crash counts.
+
 ```{python}
 #| label: Visualizations-for-crash-severity-and-road-surface-conditions
-#| echo: false
+#| code-fold: true
 
-plt.figure(figsize=(7, 4))
-sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='viridis')
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='coolwarm')
 plt.title('Crash Severity by Road Surface Condition')
 plt.xlabel('Road Surface Condition')
 plt.ylabel('Number of Crashes')
 plt.legend(title='Crash Severity')
-plt.xticks(rotation=60) 
+plt.xticks(rotation=75) 
 plt.show()
 
 
 ```
 
+An analysis of road surface conditions indicates that dry roads have the highest count of overall crashes. This is likely due to the prevalence of dry roads during typical driving conditions and higher traffic volumes. However, road surfaces like wet and snowy also account for a significant number of crashes, highlighting the importance of traction in crash prevention.
+
 ```{python}
 #| label: Heatmap-for-road-surface-condition-by-severity-and-age
-#| echo: false
-
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 25:
-        return '20-25'
-    elif 25 <= age <= 35:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
-
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+#| code-fold: true
 
 # summarizing data using a pivot table
 pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Road Surface Condition', aggfunc='count')
 
 # Normalize pivot table
 norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
-plt.figure(figsize=(10, 6))
 
-sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
-plt.title('Heatmap of how Road surfaces play a factor for certain age groups being in more danger:')
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=75)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels
+plt.title('Heatmap of Road surfaces and Age Groups')
 plt.xlabel('Road Surface Condition')
 plt.ylabel('Age Group')
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
 plt.show()
 
 ```
 
-```{python}
-#| label: Visualizations-for-number-of-crashes-by-age-and-Light-Conditions
+The heatmap displaying road surface conditions and age groups offers valuable insights into the safety implications of various road surfaces. A notable observation is that unknown and unreported surface conditions are associated with a significant proportion of severe crashes. This might indicate challenges in data collection and reporting by various agencies, suggesting that incomplete data could obscure important safety risks.
 
-plt.figure(figsize=(9, 6))
-sns.countplot(x='Age Group', hue='Light Conditions', data=crash_data, palette='coolwarm')
-plt.title('Impact of Light Conditions on number of crashes by Age Group')
-plt.xlabel('Age Group')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Light Conditions')
-plt.show()
+Despite having fewer overall crashes, icy, snowy, and wet roads exhibit higher rates of severe crashes. This finding underscores the danger posed by reduced traction and adverse weather conditions. The correlation between these road surface conditions and crash severity supports the need for additional safety measures, such as improved road maintenance, better reporting practices, and driver education on navigating challenging road conditions.
 
-
-```
-
-```{python}
-#| label: testing association between Light Conditions and Crash Severity within an Age Group
-#| echo: false
-
-#contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] #== '19-25']['Crash Severity'],
-                               #columns=crash_data[crash_data['Age Group'] #== '19-25']['Light Conditions'])
-#chi2, p_value, dof, expected = chi2_contingency(contingency_table)
-#print(f"Chi-square test p-value for 19-25 age group and light conditions: #{p_value}")
-
-
-```
+Our analysis has provided a clear understanding of the variables most closely associated with crash severity, shedding light on the factors that significantly impact crash outcomes. This knowledge serves as a solid foundation for the modeling process detailed in Question 2, where we hope to build predictive models that leverage these insights. The findings also highlight the pronounced imbalance between no-injury crashes and highly severe crashes, emphasizing the need for public agencies and Departments of Transportation (DOTs) to focus on safety measures for reducing severe incidents. By addressing these disparities and targeting the key variables related to crash severity, we can contribute to improved road safety and more effective traffic management strategies.
 
 ### Question 2:
 
@@ -595,7 +543,7 @@ plt.show()
 # Crosstab for Roadway Junction Type and feature_variable
 sns.countplot(x='Roadway Junction Type', hue='feature_variable', data=model_crash_data)
 plt.title("Box Plot for Roadway Junction Type and feature_variable")
-plt.xticks(rotation=45)
+plt.xticks(rotation=75)
 plt.show()
 
 ```
