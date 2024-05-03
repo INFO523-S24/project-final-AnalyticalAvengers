@@ -697,36 +697,6 @@ y = crash_data_encoded['feature_variable']
 ```
 
 ```{python}
-#| echo: false
-
-
-# batch_size = 100
-
-# # Initialize an empty array to store the selected feature indices
-# selected_feature_indices = []
-
-# # Iterate over the dataset in batches and perform feature selection
-# for batch_start in range(0, len(X), batch_size):
-#     X_batch = X.iloc[batch_start:batch_start+batch_size]
-#     y_batch = y.iloc[batch_start:batch_start+batch_size]
-    
-#     # Perform feature selection on the current batch
-#     k_best_selector = SelectKBest(score_func=f_classif, k=30)
-#     X_selected_batch = k_best_selector.fit_transform(X_batch, y_batch)
-    
-#     # Get the indices of the selected features and append to the list
-#     selected_feature_indices.extend(k_best_selector.get_support(indices=True))
-
-# # Get the names of the selected features
-# selected_features = X.columns[selected_feature_indices]
-
-# print('Selected features: \n\n', selected_features)
-
-# # Extract the selected features from the original DataFrame X
-# X_selected = X[selected_features]
-```
-
-```{python}
 #| label: Train-Test-Split
 #| echo: false
 
