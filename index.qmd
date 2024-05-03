@@ -41,6 +41,9 @@ This report details our approach to analyzing the Massachusetts crash dataset, i
 
 ## Analysis Plan
 
+As with any data analysis, the first step involves loading the necessary packages and importing the dataset. This ensures that all required tools and resources are available for the subsequent analysis. The output below displays the various data types in our dataset, providing a comprehensive overview of the features at our disposal, thanks to the Massachusetts Department of Transportation (MassDOT).
+
+To get a better understanding of our data, we examine the count of each data type to identify the composition of our dataset, including numerical, categorical, and text-based features. Additionally, we present the first few rows of the dataset (the "head") to give an initial overview of its structure and content. This initial exploration helps set the stage for further data processing, cleaning, and analysis, ensuring that we start with a clear understanding of the dataset's characteristics and layout.
 
 ```{python}
 #| label: load-pkgs
@@ -64,6 +67,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import numpy as np
 from scipy.stats import chi2_contingency
 import warnings
+
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 ```
@@ -94,6 +98,11 @@ crash_data.head()
 
 ### Question 1
 
+To address Question 1, the analysis begins with a detailed examination of the 13 float variables identified in the previous section. The first step involves using the *'.describe()'* method to generate initial summary statistics for these variables. This provides a quick overview of the data distribution, central tendencies, and dispersion, which is essential for understanding the basic characteristics of the numerical features.
+
+The summary statistics include key metrics such as mean, median, standard deviation, minimum and maximum values, and quartiles. By analyzing these statistics, we can identify potential outliers, skewness, and other characteristics that may influence subsequent analysis. This foundational step allows us to assess the general trends and variations within the float variables, offering insights into how they may relate to the target variable and other categorical features in the dataset.
+
+
 ```{python}
 #| label: summary-stats-for-numerical-variables
 #| echo: false
@@ -101,6 +110,10 @@ crash_data.head()
 # Display data summary stats
 crash_data.describe()
 ```
+
+As part of the analysis plan for Question 1, the next step involves identifying missing values and duplicate rows in the dataset. Given that the question focuses on age groups at the highest risk of severe crashes and the factors that contribute to crash severity, it's crucial to ensure the data's completeness and consistency.
+
+To examine the missing data, we check for missing values in the following columns, which are directly related to the question: 'Age', 'Light Conditions', 'Weather Conditions', and 'Road Surface Condition'. Any missing values in these columns could affect the analysis, as they are critical in determining the conditions under which severe crashes occur and the age groups most likely to be involved.
 
 ```{python}
 #| label: Check-for-missing-values-in-key-columns
@@ -129,84 +142,110 @@ crash_data['Weather Conditions'].fillna(common_weather, inplace=True)
 crash_data['Road Surface Condition'].fillna(common_road_surface, inplace=True)
 
 
-# Confirm changes by checking missing values again
-print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
+# # Confirm changes by checking missing values again
+# print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
 
 ```
+In dealing with missing values, we apply different imputation strategies depending on the column type and context. For the 'Light Conditions', 'Weather Conditions', and 'Road Surface Condition' columns, which are categorical, mode imputation is used to fill in missing values. Mode imputation replaces missing entries with the most frequently occurring value, ensuring that the most common data pattern is retained without introducing significant bias.
+
+For the 'Age' column, which is numerical, median imputation is employed. The median provides a robust measure of central tendency, less susceptible to outliers compared to the mean. This approach is particularly useful when dealing with skewed data or avoiding distortions from extreme values.
+
+In question 2, which involves building machine learning models, we opt to filter out rows with missing values to avoid biasing the model. However, for this current analysis, mode and median imputation are applied to maintain the dataset's size and continuity. Imputation is chosen here to preserve the context and integrity of the data, allowing for a more comprehensive analysis of crash-related factors.
 
 ```{python}
 #| label: Define-age-groups-for-easier-analysis
 #| echo: false
 
-bins = [0, 18, 25, 40, 55, 70, 100]
-labels = ['0-18', '19-25', '26-40', '41-55', '56-70', '71+']
-crash_data['Age Group'] = pd.cut(crash_data['Age'], bins=bins, labels=labels, right=False)
+# Define the age bins and labels
+age_bins = [0, 16, 17, 20, 24, 34, 44, 54, 64, 74, 84, 200]
+age_labels = ["<16", "16-17", "18-20", "21-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", ">84"]
+
+# Apply binning to the "Age" column
+crash_data["Age Group"] = pd.cut(crash_data["Age"], bins=age_bins, labels=age_labels, right=False)
 
 ```
+
+Following imputation, the 'Age' column is binned into age groups based on the age ranges provided by MassDOT. This transformation is crucial for analyzing the distribution of crash severity across different age groups. Our first visualization is a bar plot displaying the relationship between age group and crash severity, using 'Crash Severity' as the data source. This plot provides a clear visual representation of how crash severity is distributed across age groups, helping to identify patterns or trends that could inform further analysis and safety recommendations.
 
 ```{python}
 #| label: Visualization-of-age-group-and-crash-severity
-#| echo: false
+#| code-fold: true
 
-plt.figure(figsize=(12, 6))
-sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')
-plt.title('Crash Severity Distribution by Driver Age Group')
-plt.xlabel('Age Group  Driver')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Severity')
-plt.show()
+# Replace 'Property damage only (none injured)' with 'No injury'
+crash_data['Crash Severity'].replace('Property damage only (none injured)', 'No injury', inplace=True)
+
+# Plot with rotated x-axis labels
+plt.figure(figsize=(8, 6))  # Set plot size
+sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')  # Plot with seaborn
+plt.title('Crash Severity Distribution by Driver Age Group')  # Set title
+plt.xlabel('Age Group Driver')  # Set x-axis label
+plt.ylabel('Number of Crashes')  # Set y-axis label
+plt.xticks(rotation=45)  # Rotate x-axis labels
+plt.legend(title='Crash Severity')  # Set legend title
+plt.show()  # Display the plot
 
 ```
 
+The bar plot displaying the distribution of crashes by age group shows a roughly normal distribution, suggesting that crash frequency generally increases with age and then tapers off at older ages. This pattern is consistent across the overall number of crashes and when broken down by individual crash severities.
+
+However, one significant observation is the clear imbalance in the data, with a disproportionately high number of crashes classified as "no-injury" compared to other severity levels. This imbalance can impact subsequent analyses, as the majority of crashes fall into this less severe category, potentially overshadowing more critical, severe crash cases. This insight underscores the importance of addressing data imbalance when building predictive models or drawing conclusions from the data.
+
 ```{python}
 #| label: Visualizations-for-crash-severity-and-light-conditions
-#| echo: false
+#| code-fold: true
 
-plt.figure(figsize=(14, 7))
-sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
+# Replace longer labels with shorter ones
+crash_data['Light Conditions'].replace('Dark - unknown roadway lighting', 'Dark - unknown lighting', inplace=True)
+crash_data['Light Conditions'].replace('Dark - roadway not lighted', 'Dark - no lighting', inplace=True)
+
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='coolwarm')
 plt.title('Crash Severity by Light Conditions')
 plt.xlabel('Light Conditions')
 plt.ylabel('Number of Crashes')
 plt.legend(title='Crash Severity')
-plt.xticks(rotation=45)
+plt.xticks(rotation=75)
 plt.show()
 
 
 ```
+
+The analysis of crash occurrences by light conditions reveals that daylight is the most common setting for crashes. This is unsurprising, as most drivers are on the road during daylight hours, commuting to work, school, or running errands. The higher traffic volumes during these times naturally lead to more accidents.
+
+Following daylight, the next most common light condition for crashes is "dark-lighted roadway." This observation is consistent with the typical layout of urban and suburban areas where streetlights are more prevalent, providing better visibility at night. In contrast, rural areas with fewer lighted roadways tend to have less traffic, contributing to fewer overall crashes.
+
+Once again, the data shows a noticeable imbalance in crash severity. The majority of crashes fall into the "no-injury" category, indicating that while accidents are more frequent during daylight and on lighted roadways, they are generally less severe. This recurring pattern of severity imbalance suggests that even as crash frequency fluctuates with light conditions, the majority remain relatively minor in nature.
 
 ```{python}
 #| label: Heatmap-of-lighting-affecting-severity-of-danger-by-age-groups
-#| echo: false
+#| code-fold: true
 
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 25:
-        return '20-25'
-    elif 25 <= age <= 35:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
+# Create a pivot table to summarize data
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', 
+                             columns='Light Conditions', aggfunc='count')
 
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
-
-# summarizing data using a pivot table
-pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Light Conditions', aggfunc='count')
-
-# Normalize pivot table
+# Normalize the pivot table by row (to show proportions across light conditions)
 norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
-plt.figure(figsize=(10, 6))
 
-sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
-plt.title('Heatmap of how lighting plays a factor for certain age groups being in more danger:')
-plt.xlabel('Light Conditions')
-plt.ylabel('Age Group')
-plt.show()
+# Set up the plot
+plt.figure(figsize=(10, 6))
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=75)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels 
+plt.title('Heatmap of Crash Severity by Age Group and Light Conditions')
+plt.xlabel('Light Conditions')  # Label for x-axis
+plt.ylabel('Age Group')  # Label for y-axis
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
+plt.show()  # Display the heatmap
 
 ```
+
+Examining the heatmap of crash severity by age group and light conditions, viewed as a proportion rather than a total count, reveals some intriguing insights. This approach allows us to better understand the relative distribution of crash severities within each category, offering a nuanced perspective on the factors contributing to different types of crashes.
+
+The heatmap indicates that the most common age groups and lighting conditions tend to have the highest proportion of no-injury crashes. This observation suggests that higher vehicle volumes, often associated with daytime driving, result in more crashes overall, but these tend to be less severe. A plausible explanation is that during daytime, increased traffic volumes lead to more minor collisions due to congestion and low-speed accidents, which are generally safer.
+
+Additionally, the data shows that older people are significantly more likely to be involved in crashes during daylight hours, with a higher proportion of no-injury crashes. This trend aligns with typical driving patterns, where older drivers are less likely to drive at night. This finding may also reflect safer driving behavior among older drivers, who tend to avoid risky conditions such as nighttime driving.
 
 ```{python}
 #| label: Visualizations-for-crash-severity-and-weather-Conditions
@@ -220,7 +259,6 @@ plt.ylabel('Number of Crashes')
 plt.legend(title='Crash Severity')
 plt.xticks(rotation=45) 
 plt.show()
-
 
 ```
 
