@@ -701,7 +701,7 @@ y = crash_data_encoded['feature_variable']
 #| echo: false
 
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=9)
 
 # Display the shapes of the training and testing sets
 print("Shape of X_train:", X_train.shape)
@@ -715,7 +715,7 @@ print("Shape of y_test:", y_test.shape)
 #| echo: false
 #| output: false
 
-log_reg = LogisticRegression(random_state = 42)
+log_reg = LogisticRegression(random_state = 9)
 log_reg.fit(X_train, y_train)
 
 dtree = DecisionTreeClassifier()
