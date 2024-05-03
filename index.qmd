@@ -405,7 +405,7 @@ To start, we need to preprocess the crash data by filtering out rows where the s
 crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
 
 # Add a new column named 'feature_variable'
-crash_data['feature_variable'] = [0 if x == 'Property damage only (none injured)' else 1 for x in crash_data['Crash Severity']]
+crash_data['feature_variable'] = [0 if x == 'No injury' else 1 for x in crash_data['Crash Severity']]
 
 # Drop the 'Crash Severity' column
 crash_data = crash_data.drop('Crash Severity', axis=1)
