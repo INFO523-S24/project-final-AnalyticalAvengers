@@ -251,8 +251,79 @@ Additionally, the data shows that older people are significantly more likely to 
 #| label: Visualizations-for-crash-severity-and-weather-Conditions
 #| echo: false
 
-plt.figure(figsize=(14, 7))
-sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
+# Mapping from original weather conditions to simplified categories
+weather_mapping = {
+    # Clear weather
+    "Clear": "Clear",
+    "Clear/Clear": "Clear",
+    "Clear/Cloudy": "Clear",
+    "Clear/Other": "Clear",
+    "Clear/Unknown": "Clear",
+    "Clear/Snow": "Clear",
+    "Clear/Rain": "Clear",
+    "Clear/Blowing sand, snow": "Clear",
+
+    # Cloudy weather
+    "Cloudy": "Cloudy",
+    "Cloudy/Cloudy": "Cloudy",
+    "Cloudy/Clear": "Cloudy",
+    "Cloudy/Unknown": "Cloudy",
+    "Cloudy/Other": "Cloudy",
+    "Cloudy/Blowing sand, snow": "Cloudy",
+    "Cloudy/Fog, smog, smoke": "Cloudy",
+    
+    # Rain
+    "Rain": "Rain",
+    "Rain/Rain": "Rain",
+    "Rain/Cloudy": "Rain",
+    "Rain/Sleet, hail (freezing rain or drizzle)": "Rain",
+    "Rain/Fog, smog, smoke": "Rain",
+    "Rain/Severe crosswinds": "Rain",
+    "Rain/Other": "Rain",
+    "Rain/Unknown": "Rain",
+    
+    # Snow
+    "Snow": "Snow",
+    "Snow/Snow": "Snow",
+    "Snow/Cloudy": "Snow",
+    "Snow/Clear": "Snow",
+    "Snow/Rain": "Snow",
+    "Snow/Other": "Snow",
+    "Snow/Blowing sand, snow": "Snow",
+    "Snow/Sleet, hail (freezing rain or drizzle)": "Snow",
+    
+    # Sleet, hail
+    "Sleet, hail (freezing rain or drizzle)": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Cloudy": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Severe crosswinds": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Blowing sand, snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Fog, smog, smoke": "Sleet/Hail",
+    
+    # Severe crosswinds and windy conditions
+    "Severe crosswinds": "Windy",
+    "Blowing sand, snow": "Windy",
+    
+    # Fog, smog, smoke
+    "Fog, smog, smoke": "Fog",
+    "Fog, smog, smoke/Cloudy": "Fog",
+    "Fog, smog, smoke/Rain": "Fog",
+    
+    # Other and Unknown
+    "Unknown": "Unknown",
+    "Unknown/Unknown": "Unknown",
+    "Not Reported": "Unknown",
+    "Other": "Other",
+    "Reported but invalid": "Other",
+    "Unknown/Clear": "Unknown",
+    "Unknown/Other": "Unknown",
+}
+
+# Apply the mapping to simplify the "Weather Conditions"
+crash_data["Weather Conditions"] = crash_data["Weather Conditions"].map(weather_mapping).fillna("Other")
+
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='coolwarm')
 plt.title('Crash Severity by Weather Conditions')
 plt.xlabel('Weather Conditions')
 plt.ylabel('Number of Crashes')
@@ -496,78 +567,6 @@ age_labels = ["<16", "16-17", "18-20", "21-24", "25-34", "35-44", "45-54", "55-6
 
 # Apply binning to the "Age" column
 model_crash_data["Age"] = pd.cut(model_crash_data["Age"], bins=age_bins, labels=age_labels, right=False)
-
-# Mapping from original weather conditions to simplified categories
-weather_mapping = {
-    # Clear weather
-    "Clear": "Clear",
-    "Clear/Clear": "Clear",
-    "Clear/Cloudy": "Clear",
-    "Clear/Other": "Clear",
-    "Clear/Unknown": "Clear",
-    "Clear/Snow": "Clear",
-    "Clear/Rain": "Clear",
-    "Clear/Blowing sand, snow": "Clear",
-
-    # Cloudy weather
-    "Cloudy": "Cloudy",
-    "Cloudy/Cloudy": "Cloudy",
-    "Cloudy/Clear": "Cloudy",
-    "Cloudy/Unknown": "Cloudy",
-    "Cloudy/Other": "Cloudy",
-    "Cloudy/Blowing sand, snow": "Cloudy",
-    "Cloudy/Fog, smog, smoke": "Cloudy",
-    
-    # Rain
-    "Rain": "Rain",
-    "Rain/Rain": "Rain",
-    "Rain/Cloudy": "Rain",
-    "Rain/Sleet, hail (freezing rain or drizzle)": "Rain",
-    "Rain/Fog, smog, smoke": "Rain",
-    "Rain/Severe crosswinds": "Rain",
-    "Rain/Other": "Rain",
-    "Rain/Unknown": "Rain",
-    
-    # Snow
-    "Snow": "Snow",
-    "Snow/Snow": "Snow",
-    "Snow/Cloudy": "Snow",
-    "Snow/Clear": "Snow",
-    "Snow/Rain": "Snow",
-    "Snow/Other": "Snow",
-    "Snow/Blowing sand, snow": "Snow",
-    "Snow/Sleet, hail (freezing rain or drizzle)": "Snow",
-    
-    # Sleet, hail
-    "Sleet, hail (freezing rain or drizzle)": "Sleet/Hail",
-    "Sleet, hail (freezing rain or drizzle)/Snow": "Sleet/Hail",
-    "Sleet, hail (freezing rain or drizzle)/Cloudy": "Sleet/Hail",
-    "Sleet, hail (freezing rain or drizzle)/Severe crosswinds": "Sleet/Hail",
-    "Sleet, hail (freezing rain or drizzle)/Blowing sand, snow": "Sleet/Hail",
-    "Sleet, hail (freezing rain or drizzle)/Fog, smog, smoke": "Sleet/Hail",
-    
-    # Severe crosswinds and windy conditions
-    "Severe crosswinds": "Windy",
-    "Blowing sand, snow": "Windy",
-    
-    # Fog, smog, smoke
-    "Fog, smog, smoke": "Fog",
-    "Fog, smog, smoke/Cloudy": "Fog",
-    "Fog, smog, smoke/Rain": "Fog",
-    
-    # Other and Unknown
-    "Unknown": "Unknown",
-    "Unknown/Unknown": "Unknown",
-    "Not Reported": "Unknown",
-    "Other": "Other",
-    "Reported but invalid": "Other",
-    "Unknown/Clear": "Unknown",
-    "Unknown/Other": "Unknown",
-}
-
-# Apply the mapping to simplify the "Weather Conditions"
-model_crash_data["Weather Conditions"] = model_crash_data["Weather Conditions"].map(weather_mapping).fillna("Other")
-
 
 # Stacked bar plot for Sex and feature_variable
 sns.countplot(x='Sex', hue='feature_variable', data=model_crash_data)
