@@ -84,7 +84,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 
 
-## Plots for question 1
+## 
 
 ::: panel-tabset
 #### Plot B
@@ -99,13 +99,14 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 -    the plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions.
 
-
   
 :::
 
-## Plots for question 1
+
+## 
 
 ::: panel-tabset
+
 #### Plot C
 
 ![Heatmap of Crash Severity by Age Group and Light Conditions:](images/q1_plot3.png){fig-align="center" width="660"}
@@ -119,8 +120,9 @@ Specific lighting conditions where a particular age group experiences a higher p
 :::
   
 
-  
+
 ##
+
 ::: panel-tabset
 #### Plot C
 
@@ -145,13 +147,7 @@ Is it possible to develop a model that can accurately classify the severity of c
 
 ::: panel-tabset
 #### Plot A
-![Correlation Matrix Heatmap:]
-```{html}
-<div style="display: flex;">
-  <img src="images/q2_plot1.png" style="flex: 1; margin-right: 10px;">
-  <img src="images/q2_plot2.png" style="flex: 1; margin-left: 10px;">
-</div>
-```
+
 
 #### Insights
 
@@ -169,7 +165,6 @@ Visually confirm the correlation trends observed in the heatmap. The scatter plo
 
 
 ## 
-
 
 
 ::: panel-tabset
