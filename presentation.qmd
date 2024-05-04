@@ -74,12 +74,47 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 #### Insights
 
--   
+-   The plot visualizes the distribution of crashes across different age groups, categorized by crash severity (No injury, Minor Injury, etc.).
 
--   
+-   By analyzing the height of the bars for each age group and severity level, you can identify which age groups are more likely to be involved in crashes of varying severity.
 
--   
+ -   the plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers.
+
+  
 :::
+
+::: panel-tabset
+#### Plot B
+
+![Crash Severity by Light Conditions:](images/q1_plot2.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The plot visualizes the distribution of crashes across different lighting conditions, categorized by crash severity .
+
+-   By analyzing the height of the bars for each lighting condition and severity level, you can identify lighting conditions with a higher number of crashes of varying severity.
+
+-    the plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions.
+
+
+  
+:::
+
+
+::: panel-tabset
+#### Plot C
+
+![Heatmap of Crash Severity by Age Group and Light Conditions:](images/q1_plot3.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The heatmap allows for a more nuanced analysis compared to count plots. The color intensity visually represents the proportion of crashes with different severities under varying lighting conditions for each age group.
+-   You can identify trends like:
+Age groups with a higher proportion of severe crashes under dark conditions compared to well-lit conditions.
+Specific lighting conditions where a particular age group experiences a higher proportion of crashes of a certain severity .
+:::
+  
+
 
 ## Question 2:
 
