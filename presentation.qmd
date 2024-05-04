@@ -68,10 +68,11 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 ## Plots for question 1
 
 ::: panel-tabset
-
 #### Plot A
 
 ![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660"}
+
+
 
 #### Insights
 
@@ -82,6 +83,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
  -   the plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers.
 
   :::
+
 
 
 
@@ -165,17 +167,4 @@ Visually confirm the correlation trends observed in the heatmap. The scatter plo
 
 
 
-## 
-
-
-::: panel-tabset
-#### Plot B
-
-
-#### Insights
-
--   
-
--   
-  
 
