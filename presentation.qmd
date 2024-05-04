@@ -83,6 +83,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
   
 :::
 
+##
 ::: panel-tabset
 #### Plot B
 
@@ -100,7 +101,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
   
 :::
 
-
+##
 ::: panel-tabset
 #### Plot C
 
@@ -114,6 +115,21 @@ Age groups with a higher proportion of severe crashes under dark conditions comp
 Specific lighting conditions where a particular age group experiences a higher proportion of crashes of a certain severity .
 :::
   
+##
+::: panel-tabset
+#### Plot C
+
+![Crash Severity by Weather Conditions:](images/q1_plot4.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The plot shows the number of crashes with different severity levels (No injury, Minor Injury, etc.) under various weather conditions (Clear, Rain, Snow, etc.).
+
+-   By analyzing the height of the bars for each weather condition and severity level, you can identify weather conditions with a higher number of crashes of varying severity.
+
+:::
+
+
 
 
 ## Question 2:
@@ -124,6 +140,13 @@ Is it possible to develop a model that can accurately classify the severity of c
 
 ::: panel-tabset
 #### Plot A
+![Correlation Matrix Heatmap:]
+```{html}
+<div style="display: flex;">
+  <img src="images/q2_plot1.png" style="flex: 1; margin-right: 10px;">
+  <img src="images/q2_plot2.png" style="flex: 1; margin-left: 10px;">
+</div>
+```
 
 #### Insights
 
