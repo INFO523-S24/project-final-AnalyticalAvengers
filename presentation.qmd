@@ -68,6 +68,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 ## Plots for question 1
 
 ::: panel-tabset
+
 #### Plot A
 
 ![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660"}
@@ -124,7 +125,7 @@ Specific lighting conditions where a particular age group experiences a higher p
 ##
 
 ::: panel-tabset
-#### Plot C
+#### Plot D
 
 ![Crash Severity by Weather Conditions:](images/q1_plot4.png){fig-align="center" width="660"}
 
