@@ -134,21 +134,6 @@ plt.show()
 
 ```
 
-```{python}
-#| label: Visualizations for crash severity and Light Conditions
-
-
-plt.figure(figsize=(14, 7))
-sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
-plt.title('Crash Severity by Light Conditions')
-plt.xlabel('Light Conditions')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Crash Severity')
-plt.xticks(rotation=45)
-plt.show()
-
-
-```
 
 ```{python}
 
@@ -185,21 +170,6 @@ plt.show()
 
 ```
 
-```{python}
-#| label: Visualizations for crash severity and weather Conditions
-
-
-plt.figure(figsize=(14, 7))
-sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='viridis')
-plt.title('Crash Severity by Weather Conditions')
-plt.xlabel('Weather Conditions')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Crash Severity')
-plt.xticks(rotation=45) 
-plt.show()
-
-
-```
 
 ```{python}
 # heatmap for weather conditions affecting severity of crashes for certain age groups
@@ -253,23 +223,9 @@ plt.show()
 
 ```
 
-```{python}
-#| label: Visualizations for crash severity and road surface Conditions
-
-
-plt.figure(figsize=(7, 4))
-sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='viridis')
-plt.title('Crash Severity by Road Surface Condition')
-plt.xlabel('Road Surface Condition')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Crash Severity')
-plt.xticks(rotation=60) 
-plt.show()
-
-
-```
 
 ```{python}
+# heatmap for road surface conditions affecting severity of crashes for certain age groups
 
 # Categorizing age groups
 def agegroups(age):
