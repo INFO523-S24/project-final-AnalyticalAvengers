@@ -55,7 +55,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 ::: panel-tabset
 #### Plot A
 
-![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660"}
+![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660" height="450"}
 
 
 
@@ -67,14 +67,14 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
  -   the plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers.
 
-  :::
+:::
 
 ## 
 
 ::: panel-tabset
 #### Plot B
 
-![Crash Severity by Light Conditions:](images/q1_plot2.png){fig-align="center" width="660"}
+![Crash Severity by Light Conditions:](images/q1_plot2.png){fig-align="center" width="660" height="550"}
 
 #### Insights
 
@@ -84,9 +84,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 -    the plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions.
 
-  
 :::
-
 
 ## 
 
@@ -121,29 +119,77 @@ Specific lighting conditions where a particular age group experiences a higher p
 :::
 
 
-## Question 2:
+## Question 2: 
 
 Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
 
-## Plots for question 2
+## Model Development and Evaluation
+
+Building on the insights from Question 1, our aim in Question 2 is to develop and evaluate predictive models that can accurately classify the severity of crashes. This section describes our approach to modeling, including data preparation, feature selection, model training, and evaluation.
+
+## Data Preparation and Feature Selection
+
+We filtered the data to exclude rows with unknown severity and then created a binary target variable to distinguish between 'no injury' and 'injury/fatality' crashes. We focused on features identified as potentially influential, such as Speed Limit, Light Conditions, and Weather Conditions.
+
+## Model Training
+
+We trained four different machine learning models: Logistic Regression, Decision Tree, Random Forest, and K-Nearest Neighbors. Each model was evaluated using a split of 80% training data and 20% testing data.
+
+## Model Evaluation
+
+We assessed the models based on accuracy, precision, recall, and F1-score. Additionally, we computed the ROC curves and AUC to evaluate the models' performance comprehensively.
+
+## Visualizations for Question 2
 
 ::: panel-tabset
-#### Plot A
-
+#### Correlation Matrix and Pair Plot
+![Correlation matrix and pair plot showing the relationship between numerical features and the target variable.](images/q2_plot1.png)
 
 #### Insights
-
--   Heatmap:
-
-Identify strong positive or negative correlations between numerical features and the target variable (crash severity, assuming it's numerical). Features with high positive correlations might influence crash severity in a similar way, while features with high negative correlations might have opposing effects.
-
--   Pairplot:
-
-Visually confirm the correlation trends observed in the heatmap. The scatter plots can reveal non-linear relationships that might not be evident in the correlation matrix.
-
-  
+- The correlation matrix helps identify the lack of strong linear relationships, suggesting that non-linear modeling techniques may be more effective.
 :::
 
+##
+
+::: panel-tabset
+#### Correlation Matrix and Pair Plot
+![pair plot provides for the distributions and relationships of numerical features.](images/q2_plot1_1.png)
+
+#### Insights
+- The pair plot provides a visual insight into the distributions and relationships of numerical features, highlighting potential outliers and trends.
+:::
+
+##
+::: panel-tabset
+#### ROC Curve
+![ROC Curve for different classifiers showing their performance in classifying crash severity.](images/q2_plot2.png)
+
+#### Insights
+- The ROC curve illustrates the trade-off between sensitivity and specificity. Random Forest shows the highest AUC, indicating the best performance among the tested models in distinguishing between the crash severities.
+
+:::
+
+##
+
+::: panel-tabset
+#### Confusion Matrices for Models
+![Confusion matrices for Logistic Regression, KNN, Decision Tree, and Random Forest models.](images/q2_plot3.png){fig-align="center" height="800"}
+
+#### Insights
+- The confusion matrices reveal the performance of each model in predicting the correct classes. Notably, Random Forest balanced the recall and precision better than other models, effectively managing the class imbalance.
+
+:::
+## Discussion and Conclusions
+
+The models developed in this study provide a foundation for predicting crash severity with a reasonable degree of accuracy. However, the imbalance in the dataset poses a challenge, as models tend to predict the majority class more frequently.
+
+## Recommendations for Future Work
+
+- Investigate more sophisticated balancing techniques like SMOTE or targeted sampling methods.
+- Explore more complex models or ensemble methods that may capture interactions between features more effectively.
+- Consider integrating more contextual data that could impact crash severity, such as time of day or specific event data like traffic volume.
+
+By addressing these areas, future research can enhance the predictive accuracy and utility of the models, ultimately contributing to more targeted and effective road safety measures.
 
 
 

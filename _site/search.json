@@ -1,0 +1,128 @@
+[
+  {
+    "objectID": "presentation.html#question-1",
+    "href": "presentation.html#question-1",
+    "title": "Project title",
+    "section": "Question 1:",
+    "text": "Question 1:\nWhich age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger?"
+  },
+  {
+    "objectID": "presentation.html#plots-for-question-1",
+    "href": "presentation.html#plots-for-question-1",
+    "title": "Project title",
+    "section": "Plots for question 1",
+    "text": "Plots for question 1\n\nPlot AInsights\n\n\n\n\n\nBar Plot visualizing the Severity of car crashes across different age groups:\n\n\n\n\n\nThe plot visualizes the distribution of crashes across different age groups, categorized by crash severity (No injury, Minor Injury, etc.).\nBy analyzing the height of the bars for each age group and severity level, you can identify which age groups are more likely to be involved in crashes of varying severity.\nthe plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers."
+  },
+  {
+    "objectID": "presentation.html#section-1",
+    "href": "presentation.html#section-1",
+    "title": "Project title",
+    "section": "",
+    "text": "Plot BInsights\n\n\n\n\n\nCrash Severity by Light Conditions:\n\n\n\n\n\nThe plot visualizes the distribution of crashes across different lighting conditions, categorized by crash severity .\nBy analyzing the height of the bars for each lighting condition and severity level, you can identify lighting conditions with a higher number of crashes of varying severity.\nthe plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions."
+  },
+  {
+    "objectID": "presentation.html#section-2",
+    "href": "presentation.html#section-2",
+    "title": "Project title",
+    "section": "",
+    "text": "Plot CInsights\n\n\n\n\n\nHeatmap of Crash Severity by Age Group and Light Conditions:\n\n\n\n\n\nThe heatmap allows for a more nuanced analysis compared to count plots. The color intensity visually represents the proportion of crashes with different severities under varying lighting conditions for each age group.\nYou can identify trends like: Age groups with a higher proportion of severe crashes under dark conditions compared to well-lit conditions. Specific lighting conditions where a particular age group experiences a higher proportion of crashes of a certain severity ."
+  },
+  {
+    "objectID": "presentation.html#section-3",
+    "href": "presentation.html#section-3",
+    "title": "Project title",
+    "section": "",
+    "text": "Plot DInsights\n\n\n\n\n\nCrash Severity by Weather Conditions:\n\n\n\n\n\nThe plot shows the number of crashes with different severity levels (No injury, Minor Injury, etc.) under various weather conditions (Clear, Rain, Snow, etc.).\nBy analyzing the height of the bars for each weather condition and severity level, you can identify weather conditions with a higher number of crashes of varying severity."
+  },
+  {
+    "objectID": "presentation.html#question-2",
+    "href": "presentation.html#question-2",
+    "title": "Project title",
+    "section": "Question 2:",
+    "text": "Question 2:\nIs it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?"
+  },
+  {
+    "objectID": "presentation.html#plots-for-question-2",
+    "href": "presentation.html#plots-for-question-2",
+    "title": "Project title",
+    "section": "Plots for question 2",
+    "text": "Plots for question 2\n\nPlot AInsights\n\n\n\n\n\n\nHeatmap:\n\nIdentify strong positive or negative correlations between numerical features and the target variable (crash severity, assuming it’s numerical). Features with high positive correlations might influence crash severity in a similar way, while features with high negative correlations might have opposing effects.\n\nPairplot:\n\nVisually confirm the correlation trends observed in the heatmap. The scatter plots can reveal non-linear relationships that might not be evident in the correlation matrix."
+  },
+  {
+    "objectID": "presentation.html#model-development-and-evaluation",
+    "href": "presentation.html#model-development-and-evaluation",
+    "title": "Project title",
+    "section": "Model Development and Evaluation",
+    "text": "Model Development and Evaluation\nBuilding on the insights from Question 1, our aim in Question 2 is to develop and evaluate predictive models that can accurately classify the severity of crashes. This section describes our approach to modeling, including data preparation, feature selection, model training, and evaluation."
+  },
+  {
+    "objectID": "presentation.html#data-preparation-and-feature-selection",
+    "href": "presentation.html#data-preparation-and-feature-selection",
+    "title": "Project title",
+    "section": "Data Preparation and Feature Selection",
+    "text": "Data Preparation and Feature Selection\nWe filtered the data to exclude rows with unknown severity and then created a binary target variable to distinguish between ‘no injury’ and ‘injury/fatality’ crashes. We focused on features identified as potentially influential, such as Speed Limit, Light Conditions, and Weather Conditions."
+  },
+  {
+    "objectID": "presentation.html#model-training",
+    "href": "presentation.html#model-training",
+    "title": "Project title",
+    "section": "Model Training",
+    "text": "Model Training\nWe trained four different machine learning models: Logistic Regression, Decision Tree, Random Forest, and K-Nearest Neighbors. Each model was evaluated using a split of 80% training data and 20% testing data."
+  },
+  {
+    "objectID": "presentation.html#model-evaluation",
+    "href": "presentation.html#model-evaluation",
+    "title": "Project title",
+    "section": "Model Evaluation",
+    "text": "Model Evaluation\nWe assessed the models based on accuracy, precision, recall, and F1-score. Additionally, we computed the ROC curves and AUC to evaluate the models’ performance comprehensively."
+  },
+  {
+    "objectID": "presentation.html#visualizations-for-question-2",
+    "href": "presentation.html#visualizations-for-question-2",
+    "title": "Project title",
+    "section": "Visualizations for Question 2",
+    "text": "Visualizations for Question 2\n\nCorrelation Matrix and Pair PlotInsights\n\n\n\n\n\nCorrelation matrix and pair plot showing the relationship between numerical features and the target variable.\n\n\n\n\n\nThe correlation matrix helps identify the lack of strong linear relationships, suggesting that non-linear modeling techniques may be more effective."
+  },
+  {
+    "objectID": "presentation.html#question-2-is-it-possible-to-develop-a-model-that-can-accurately-classify-the-severity-of-crashes-based-on-our-findings-from-the-previous-question-about-factors-that-contribute-to-said-level-of-danger",
+    "href": "presentation.html#question-2-is-it-possible-to-develop-a-model-that-can-accurately-classify-the-severity-of-crashes-based-on-our-findings-from-the-previous-question-about-factors-that-contribute-to-said-level-of-danger",
+    "title": "Project title",
+    "section": "Question 2: Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?",
+    "text": "Question 2: Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?"
+  },
+  {
+    "objectID": "presentation.html#discussion-and-conclusions",
+    "href": "presentation.html#discussion-and-conclusions",
+    "title": "Project title",
+    "section": "Discussion and Conclusions",
+    "text": "Discussion and Conclusions\nThe models developed in this study provide a foundation for predicting crash severity with a reasonable degree of accuracy. However, the imbalance in the dataset poses a challenge, as models tend to predict the majority class more frequently."
+  },
+  {
+    "objectID": "presentation.html#section-4",
+    "href": "presentation.html#section-4",
+    "title": "Project title",
+    "section": "",
+    "text": "Correlation Matrix and Pair PlotInsights\n\n\n\n\n\npair plot provides for the distributions and relationships of numerical features.\n\n\n\n\n\nThe pair plot provides a visual insight into the distributions and relationships of numerical features, highlighting potential outliers and trends."
+  },
+  {
+    "objectID": "presentation.html#section-5",
+    "href": "presentation.html#section-5",
+    "title": "Project title",
+    "section": "",
+    "text": "ROC CurveInsights\n\n\n\n\n\nROC Curve for different classifiers showing their performance in classifying crash severity.\n\n\n\n\n\nThe ROC curve illustrates the trade-off between sensitivity and specificity. Random Forest shows the highest AUC, indicating the best performance among the tested models in distinguishing between the crash severities."
+  },
+  {
+    "objectID": "presentation.html#recommendations-for-future-work",
+    "href": "presentation.html#recommendations-for-future-work",
+    "title": "Project title",
+    "section": "Recommendations for Future Work",
+    "text": "Recommendations for Future Work\n\nInvestigate more sophisticated balancing techniques like SMOTE or targeted sampling methods.\nExplore more complex models or ensemble methods that may capture interactions between features more effectively.\nConsider integrating more contextual data that could impact crash severity, such as time of day or specific event data like traffic volume.\n\nBy addressing these areas, future research can enhance the predictive accuracy and utility of the models, ultimately contributing to more targeted and effective road safety measures."
+  },
+  {
+    "objectID": "presentation.html#section-6",
+    "href": "presentation.html#section-6",
+    "title": "Project title",
+    "section": "",
+    "text": "Confusion Matrices for ModelsInsights\n\n\n\n\n\nConfusion matrices for Logistic Regression, KNN, Decision Tree, and Random Forest models.\n\n\n\n\n\nThe confusion matrices reveal the performance of each model in predicting the correct classes. Notably, Random Forest balanced the recall and precision better than other models, effectively managing the class imbalance."
+  }
+]
