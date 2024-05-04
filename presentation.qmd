@@ -84,9 +84,6 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
   :::
 
-
-
-
 ## 
 
 ::: panel-tabset
@@ -123,7 +120,6 @@ Specific lighting conditions where a particular age group experiences a higher p
 :::
   
 
-
 ##
 
 ::: panel-tabset
@@ -138,8 +134,6 @@ Specific lighting conditions where a particular age group experiences a higher p
 -   By analyzing the height of the bars for each weather condition and severity level, you can identify weather conditions with a higher number of crashes of varying severity.
 
 :::
-
-
 
 
 ## Question 2:
