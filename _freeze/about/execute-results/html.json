@@ -1,8 +1,8 @@
 {
-  "hash": "0d3499508e3ee085b427dafc14afae6e",
+  "hash": "ebf31f5b7384ff39862f7d506eec9f30",
   "result": {
     "engine": "jupyter",
-    "markdown": "---\ntitle: About\nformat: html\neditor: visual\n---\n\nThis project was developed by **ANALYTICAL AVENGERS** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\n-   Tanya Evita George- First year graduate student pursuing Data Science at the University of Arizona.\n\n-   Mohammad Ali Farmani : 2nd year PhD student in Hydrology and Atmospheric Sciences in University of Arizona.\n\n-   Melika Akbarsharifi - second year Graduate - ECE major.\n\n-   Sunday Usman - Graduate student - Systems and Industrial Engineering major.\n\n-   H M Abdul Fattah - Graduate student - Information Science, University of Arizona.\n\n",
+    "markdown": "---\ntitle: About\nformat: html\neditor: visual\n---\n\nThis project was developed by **ANALYTICAL AVENGERS** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\n-   Tanya Evita George- First year graduate student pursuing Data Science at the University of Arizona.\n\n-   Mohammad Ali Farmani : 2nd year PhD student in Hydrology and Atmospheric Sciences in University of Arizona.\n\n-   Melika Akbarsharifi - second year Graduate - ECE major.\n\n-   Sunday Usman - Graduate student - Systems and Industrial Engineering major.\n\n-   H M Abdul Fattah - Graduate student - Information Science, University of Arizona.\n\n- Divya Liladhar Dhole - 1st year MS data science\n\n",
     "supporting": [
       "about_files\\figure-html"
     ],

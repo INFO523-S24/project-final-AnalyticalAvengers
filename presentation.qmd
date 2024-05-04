@@ -72,14 +72,75 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 ![Bar Plot visualizing the Severity of car crashes across different age groups:](images/q1_plot1.png){fig-align="center" width="660"}
 
+
+
 #### Insights
 
--   
+-   The plot visualizes the distribution of crashes across different age groups, categorized by crash severity (No injury, Minor Injury, etc.).
 
--   
+-   By analyzing the height of the bars for each age group and severity level, you can identify which age groups are more likely to be involved in crashes of varying severity.
 
--   
+ -   the plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers.
+
+  :::
+
+
+
+
+## 
+
+::: panel-tabset
+#### Plot B
+
+![Crash Severity by Light Conditions:](images/q1_plot2.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The plot visualizes the distribution of crashes across different lighting conditions, categorized by crash severity .
+
+-   By analyzing the height of the bars for each lighting condition and severity level, you can identify lighting conditions with a higher number of crashes of varying severity.
+
+-    the plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions.
+
+  
 :::
+
+
+## 
+
+::: panel-tabset
+
+#### Plot C
+
+![Heatmap of Crash Severity by Age Group and Light Conditions:](images/q1_plot3.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The heatmap allows for a more nuanced analysis compared to count plots. The color intensity visually represents the proportion of crashes with different severities under varying lighting conditions for each age group.
+-   You can identify trends like:
+Age groups with a higher proportion of severe crashes under dark conditions compared to well-lit conditions.
+Specific lighting conditions where a particular age group experiences a higher proportion of crashes of a certain severity .
+:::
+  
+
+
+##
+
+::: panel-tabset
+#### Plot D
+
+![Crash Severity by Weather Conditions:](images/q1_plot4.png){fig-align="center" width="660"}
+
+#### Insights
+
+-   The plot shows the number of crashes with different severity levels (No injury, Minor Injury, etc.) under various weather conditions (Clear, Rain, Snow, etc.).
+
+-   By analyzing the height of the bars for each weather condition and severity level, you can identify weather conditions with a higher number of crashes of varying severity.
+
+:::
+
+
+
 
 ## Question 2:
 
@@ -90,126 +151,20 @@ Is it possible to develop a model that can accurately classify the severity of c
 ::: panel-tabset
 #### Plot A
 
+
 #### Insights
 
--   
+-   Heatmap:
 
--   
+Identify strong positive or negative correlations between numerical features and the target variable (crash severity, assuming it's numerical). Features with high positive correlations might influence crash severity in a similar way, while features with high negative correlations might have opposing effects.
 
--   
+-   Pairplot:
+
+Visually confirm the correlation trends observed in the heatmap. The scatter plots can reveal non-linear relationships that might not be evident in the correlation matrix.
+
+  
 :::
 
-# Using Quarto for presentations
 
-## Quarto
 
--   The presentation is created using the Quarto CLI
 
--   `##` sets the start of a new slide
-
-## Layouts
-
-You can use plain text
-
-::: columns
-::: {.column width="40%"}
--   or bullet points[^1]
-:::
-
-::: {.column width="60%"}
-or in two columns
-:::
-:::
-
-[^1]: And add footnotes
-
--   like
-
--   this
-
-## Code
-
-```{python}
-from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import pandas as pd
-
-# Fit a linear regression model
-X = mtcars[['speed']]
-y = mtcars['mpg']
-model = LinearRegression().fit(X, y)
-
-# Summary of the model
-X2 = sm.add_constant(X)
-est = sm.OLS(y, X2)
-est2 = est.fit()
-print(est2.summary())
-```
-
-## Plots
-
-```{python}
-penguins['species'] = penguins['species'].apply(lambda x: "Adelie" if x == "Adelie" else "Other")
-sns.scatterplot(data=penguins, x='flipper_length_mm', y='body_mass_g', hue='species')
-plt.show()
-```
-
-## Plot and text
-
-::: columns
-::: {.column width="50%"}
--   Some text
-
--   goes here
-:::
-
-::: {.column width="50%"}
-```{python}
-#| warning: false
-#| fig.width: 5.5
-fig, ax = plt.subplots(figsize=(5.5, 5.5 * 0.618))
-sns.boxplot(data=penguins, x='bill_length_mm', y='species', hue='species', ax=ax)
-plt.show()
-```
-:::
-:::
-
-# A new section...
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{python}
-penguins.head().to_html()
-```
-
-## Images
-
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png){fig-align="center" width="500"}
-
-## Math Expressions {.smaller}
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\\alpha+\\beta\$ renders $\alpha + \beta$. You can use the display style with double dollar signs:
-
-```         
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$
-\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i
-$$
-
-Limitations:
-
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-2.  There should not be spaces after the opening `$` or before the closing `$`.
-
-# Wrap up
-
-## Feeling adventurous?
-
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.

@@ -2,8 +2,8 @@
 title: "ANALYTICAL AVENGERS"
 subtitle: "INFO 523 - Project Final"
 author: 
-  - name: "ANALYTICAL AVENGERS-<br>
-    MELIKA AKBARSHARIFI, Divya liladhar Dhole, Mohammad Ali Farmani,<br> H M Abdul Fattah, Gabriel Gedaliah Geffen, Tanya George, Sunday Usman "
+  - name: "ANALYTICAL AVENGER:-<br>
+    Melika Akbarsharifi, Divya liladhar Dhole, Mohammad Ali Farmani,<br> H M Abdul Fattah, Gabriel Gedaliah Geffen, Tanya George, Sunday Usman "
     affiliations:
       - name: "School of Information, University of Arizona"
 description: "Project description"
@@ -15,13 +15,35 @@ format:
 editor: visual
 execute:
   warning: false
-  echo: false
 jupyter: python3
 ---
 
 ## Abstract
 
-This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a 100% prediction accuracy, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
+This study investigates the relationship between age demographics and severe crashes, with a focus on developing a predictive model to enhance road safety in Massachusetts. Using a crash dataset from January 2024, we explore how age correlates with the severity of crashes and examine environmental factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved. Our analysis reveals crucial patterns, indicating which age groups, both drivers and vulnerable users, are at greater risk of severe crashes. Additionally, we identify environmental conditions that contribute to the likelihood and severity of crashes, providing insights for targeted safety measures. To classify crash severity, we experimented with various machine learning (ML) techniques, including logistic regression, decision trees, random forests, and K Nearest Neighbors (KNN). Our models achieved a prediction accuracy of around 78% in all cases, indicating a strong ability to classify crash severity based on the selected features. However, the absence of road volume or vehicle miles traveled data poses a limitation in contextualizing the frequency of crashes. The outcomes of our research offer valuable tools for policymakers and practitioners, allowing for more proactive safety measures and resource allocation. By accurately predicting crash risks based on age demographics and environmental conditions, authorities can implement preemptive interventions to reduce severe accidents. Ultimately, this study contributes to a data-driven approach to road safety, with the potential to make tangible improvements in public safety and traffic management.
+
+## Introduction
+
+Understanding the factors contributing to severe car crashes is crucial for improving road safety and reducing traffic-related injuries and fatalities. This project aims to develop a predictive model that correlates age demographics with severe crashes in Massachusetts. The ultimate goal is to identify key risk factors and provide data-driven insights for implementing effective safety measures.
+
+Our team is analyzing a comprehensive dataset of car crashes from January 2024, collected from the Massachusetts Registry of Motor Vehicles. This dataset comprises 72 dimensions, encompassing a range of variables, including crash characteristics, driver demographics, environmental conditions, and vehicle information. By examining these variables, we seek to uncover patterns that link age with severe crashes, offering valuable insights into potential high-risk groups and circumstances.
+
+Our analysis focuses on two main research questions: identifying the age groups most at risk for severe crashes and exploring the role of environmental factors such as lighting, weather, road conditions, and speed limits. Additionally, we aim to develop a predictive model capable of classifying crash severity based on these variables. To achieve this, we used multiple binary classification models, which are known for their simplicity and effectiveness in classification tasks.
+
+The methodology for our analysis involved several key steps. First, we pre-processed the dataset to handle missing data, standardize categorical variables, and scale numerical features. Next, we conducted exploratory data analysis to identify significant correlations and patterns. To predict crash severity, we trained a KNN model using a subset of the data and evaluated its performance on a separate test set. The model's accuracy, precision, recall, and F1-score were measured to determine its effectiveness. The high accuracy achieved in the model's predictions indicates its potential for real-world application in road safety.
+
+This report details our approach to analyzing the Massachusetts crash dataset, including the steps taken to process the data, build the predictive model, and evaluate its performance. We discuss our findings and provide insights into which age groups are most at risk, along with the environmental factors that contribute to severe crashes. Through this work, we aim to contribute to road safety practices and provide useful information for policymakers, traffic safety professionals, and other stakeholders interested in reducing traffic-related incidents and enhancing public safety.
+
+## Questions
+
+1. Which age groups are at the highest risk of getting into severe crashes, and how do factors like lighting, weather, road conditions, speed limits, and the number of vehicles involved contribute to the likelihood of certain age groups being in more danger?
+2. Is it possible to develop a model that can accurately classify the severity of crashes based on our findings from the previous question about factors that contribute to said level of danger?
+
+## Analysis Plan
+
+As with any data analysis, the first step involves loading the necessary packages and importing the dataset. This ensures that all required tools and resources are available for the subsequent analysis. The output below displays the various data types in our dataset, providing a comprehensive overview of the features at our disposal, thanks to the Massachusetts Department of Transportation (MassDOT).
+
+To get a better understanding of our data, we examine the count of each data type to identify the composition of our dataset, including numerical, categorical, and text-based features. Additionally, we present the first few rows of the dataset (the "head") to give an initial overview of its structure and content. This initial exploration helps set the stage for further data processing, cleaning, and analysis, ensuring that we start with a clear understanding of the dataset's characteristics and layout.
 
 ```{python}
 #| label: load-pkgs
@@ -45,47 +67,65 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import numpy as np
 from scipy.stats import chi2_contingency
 import warnings
+
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 ```
 
 ```{python}
+#| label: load-data
+#| echo: false
+
 # Read in the data
 url = 'data/crash_data.csv'
 crash_data = pd.read_csv(url)
 ```
 
 ```{python}
-# Get the distinct data types of features in the DataFrame
-distinct_data_types = crash_data.dtypes.unique()
+#| label: data-overview
+#| echo: false
 
-print("Distinct data types of features in crash_data:")
-print(distinct_data_types)
+# Get the count of each data type in the DataFrame
+data_type_counts = crash_data.dtypes.value_counts()
+
+print("Count of each data type in the DataFrame:")
+print(data_type_counts)
+print()
 
 # Display the first few rows to understand the structure of the dataset
-print('First few rows of the crash data: \n', crash_data.head())
+crash_data.head()
 ```
 
 ### Question 1
 
+To address Question 1, the analysis begins with a detailed examination of the 13 float variables identified in the previous section. The first step involves using the *'.describe()'* method to generate initial summary statistics for these variables. This provides a quick overview of the data distribution, central tendencies, and dispersion, which is essential for understanding the basic characteristics of the numerical features.
+
+The summary statistics include key metrics such as mean, median, standard deviation, minimum and maximum values, and quartiles. By analyzing these statistics, we can identify potential outliers, skewness, and other characteristics that may influence subsequent analysis. This foundational step allows us to assess the general trends and variations within the float variables, offering insights into how they may relate to the target variable and other categorical features in the dataset.
+
+
 ```{python}
-#| label: summary statistics for numerical variables
+#| label: summary-stats-for-numerical-variables
+#| echo: false
 
+# Display data summary stats
+crash_data.describe()
+```
 
-print(crash_data.describe())
+As part of the analysis plan for Question 1, the next step involves identifying missing values and duplicate rows in the dataset. Given that the question focuses on age groups at the highest risk of severe crashes and the factors that contribute to crash severity, it's crucial to ensure the data's completeness and consistency.
 
+To examine the missing data, we check for missing values in the following columns, which are directly related to the question: 'Age', 'Light Conditions', 'Weather Conditions', and 'Road Surface Condition'. Any missing values in these columns could affect the analysis, as they are critical in determining the conditions under which severe crashes occur and the age groups most likely to be involved.
+
+```{python}
+#| label: Check-for-missing-values-in-key-columns
+#| echo: false
 
 # Check for missing values in key columns
 print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
-
-
-
-
 ```
 
 ```{python}
-#| label: Handling-missing-and-duplicate-rows
-
+#| label: Handling-missing-and-duplicate-rows-of-key-columns
+#| echo: false
 
 # Impute missing values for 'Age of Driver using median
 crash_data['Age'].fillna(crash_data['Age'].median(), inplace=True)
@@ -102,240 +142,426 @@ crash_data['Weather Conditions'].fillna(common_weather, inplace=True)
 crash_data['Road Surface Condition'].fillna(common_road_surface, inplace=True)
 
 
-# Confirm changes by checking missing values again
-print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
+# # Confirm changes by checking missing values again
+# print(crash_data[['Age', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition']].isnull().sum())
 
+```
+In dealing with missing values, we apply different imputation strategies depending on the column type and context. For the 'Light Conditions', 'Weather Conditions', and 'Road Surface Condition' columns, which are categorical, mode imputation is used to fill in missing values. Mode imputation replaces missing entries with the most frequently occurring value, ensuring that the most common data pattern is retained without introducing significant bias.
+
+For the 'Age' column, which is numerical, median imputation is employed. The median provides a robust measure of central tendency, less susceptible to outliers compared to the mean. This approach is particularly useful when dealing with skewed data or avoiding distortions from extreme values.
+
+In question 2, which involves building machine learning models, we opt to filter out rows with missing values to avoid biasing the model. However, for this current analysis, mode and median imputation are applied to maintain the dataset's size and continuity. Imputation is chosen here to preserve the context and integrity of the data, allowing for a more comprehensive analysis of crash-related factors.
+
+```{python}
+#| label: Define-age-groups-for-easier-analysis
+#| echo: false
+
+# Define the age bins and labels
+age_bins = [0, 16, 17, 20, 24, 34, 44, 54, 64, 74, 84, 200]
+age_labels = ["<16", "16-17", "18-20", "21-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", ">84"]
+
+# Apply binning to the "Age" column
+crash_data["Age Group"] = pd.cut(crash_data["Age"], bins=age_bins, labels=age_labels, right=False)
 
 ```
 
+Following imputation, the 'Age' column is binned into age groups based on the age ranges provided by MassDOT. This transformation is crucial for analyzing the distribution of crash severity across different age groups. Our first visualization is a bar plot displaying the relationship between age group and crash severity, using 'Crash Severity' as the data source. This plot provides a clear visual representation of how crash severity is distributed across age groups, helping to identify patterns or trends that could inform further analysis and safety recommendations.
+
 ```{python}
-#| label: Define age groups for easier analysis
+#| label: Visualization-of-age-group-and-crash-severity
+#| code-fold: true
 
+# Replace 'Property damage only (none injured)' with 'No injury'
+crash_data['Crash Severity'].replace('Property damage only (none injured)', 'No injury', inplace=True)
 
-bins = [0, 18, 25, 40, 55, 70, 100]
-labels = ['0-18', '19-25', '26-40', '41-55', '56-70', '71+']
-crash_data['Age Group'] = pd.cut(crash_data['Age'], bins=bins, labels=labels, right=False)
-
+# Plot with rotated x-axis labels
+plt.figure(figsize=(8, 6))  # Set plot size
+sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')  # Plot with seaborn
+plt.title('Crash Severity Distribution by Driver Age Group')  # Set title
+plt.xlabel('Age Group Driver')  # Set x-axis label
+plt.ylabel('Number of Crashes')  # Set y-axis label
+plt.xticks(rotation=45)  # Rotate x-axis labels
+plt.legend(title='Crash Severity')  # Set legend title
+plt.show()  # Display the plot
 
 ```
 
-```{python}
-#| label: Visualization of age group and crash severity
+The bar plot displaying the distribution of crashes by age group shows a roughly normal distribution, suggesting that crash frequency generally increases with age and then tapers off at older ages. This pattern is consistent across the overall number of crashes and when broken down by individual crash severities.
 
-
-plt.figure(figsize=(12, 6))
-sns.countplot(x='Age Group', hue='Crash Severity', data=crash_data, palette='coolwarm')
-plt.title('Crash Severity Distribution by Driver Age Group')
-plt.xlabel('Age Group  Driver')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Severity')
-plt.show()
-
-
-```
-
+However, one significant observation is the clear imbalance in the data, with a disproportionately high number of crashes classified as "no-injury" compared to other severity levels. This imbalance can impact subsequent analyses, as the majority of crashes fall into this less severe category, potentially overshadowing more critical, severe crash cases. This insight underscores the importance of addressing data imbalance when building predictive models or drawing conclusions from the data.
 
 ```{python}
+#| label: Visualizations-for-crash-severity-and-light-conditions
+#| code-fold: true
 
-# Heatmap of lighting affecting the severity of danger in different age groups
+# Replace longer labels with shorter ones
+crash_data['Light Conditions'].replace('Dark - unknown roadway lighting', 'Dark - unknown lighting', inplace=True)
+crash_data['Light Conditions'].replace('Dark - roadway not lighted', 'Dark - no lighting', inplace=True)
 
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 25:
-        return '20-25'
-    elif 25 <= age <= 35:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
-
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
-
-# summarizing data using a pivot table
-pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Light Conditions', aggfunc='count')
-
-# Normalize pivot table
-norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
-plt.figure(figsize=(10, 6))
-
-sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
-plt.title('Heatmap of how lighting plays a factor for certain age groups being in more danger:')
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Light Conditions', hue='Crash Severity', data=crash_data, palette='coolwarm')
+plt.title('Crash Severity by Light Conditions')
 plt.xlabel('Light Conditions')
-plt.ylabel('Age Group')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=75)
 plt.show()
 
 
 ```
 
+The analysis of crash occurrences by light conditions reveals that daylight is the most common setting for crashes. This is unsurprising, as most drivers are on the road during daylight hours, commuting to work, school, or running errands. The higher traffic volumes during these times naturally lead to more accidents.
+
+Following daylight, the next most common light condition for crashes is "dark-lighted roadway." This observation is consistent with the typical layout of urban and suburban areas where streetlights are more prevalent, providing better visibility at night. In contrast, rural areas with fewer lighted roadways tend to have less traffic, contributing to fewer overall crashes.
+
+Once again, the data shows a noticeable imbalance in crash severity. The majority of crashes fall into the "no-injury" category, indicating that while accidents are more frequent during daylight and on lighted roadways, they are generally less severe. This recurring pattern of severity imbalance suggests that even as crash frequency fluctuates with light conditions, the majority remain relatively minor in nature.
 
 ```{python}
-# heatmap for weather conditions affecting severity of crashes for certain age groups
+#| label: Heatmap-of-lighting-affecting-severity-of-danger-by-age-groups
+#| code-fold: true
 
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 45:
-        return '20-25'
-    elif 45 <= age <= 60:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
+# Create a pivot table to summarize data
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', 
+                             columns='Light Conditions', aggfunc='count')
 
-# Categorizing weather conditions
-def weathergroups(weather):
-    if weather in ['Blowing sand, snow', 'Blowing sand, snow/Snow', 'Clear/Snow', 'Cloudy/Blowing sand, snow', 'Other/Snow']:
-        return 'Snowy conditions'
-    elif weather in ['Clear/Rain', 'Fog, smog, smoke/Rain', 'Rain/Blowing sand, snow', 'Rain/Fog, smog, smoke', 'Rain/Severe crosswinds', 'Rain/Unknown']:
-        return 'Rainy/foggy conditions'
-    elif weather in ['Snow/Clear', 'Snow/Rain', 'Snow/Snow']:
-        return 'Mostly Snowy'
-    elif weather in ['Clear/Clear', 'Unknown/Clear']:
-        return 'Clear weather'
-    elif weather in ['Cloudy/Blowing sand, snow', 'Cloudy/Fog, smog, smoke', 'Cloudy/Severe crosswinds', 'Cloudy/Unknown']:
-        return 'Cloudy/smog conditions'
-    elif weather in ['Sleet, hail(freezing rain or drizzle)', 'Sleet, hail(freezing rain or drizzle)/Fog, smog, smoke', 'Sleet, hail(freezing rain or drizzle)/Severe crosswinds', 'Sleet, hail(freezing rain or drizzle)/Unknown']:
-        return 'Hail/Freezing Drizzle'
+# Normalize the pivot table by row (to show proportions across light conditions)
+norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
 
+# Set up the plot
+plt.figure(figsize=(10, 6))
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=75)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels 
+plt.title('Heatmap of Crash Severity by Age Group and Light Conditions')
+plt.xlabel('Light Conditions')  # Label for x-axis
+plt.ylabel('Age Group')  # Label for y-axis
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
+plt.show()  # Display the heatmap
 
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+```
 
-crash_data['Weather Group'] = crash_data['Weather Conditions'].apply(weathergroups)
+Examining the heatmap of crash severity by age group and light conditions, viewed as a proportion rather than a total count, reveals some intriguing insights. This approach allows us to better understand the relative distribution of crash severities within each category, offering a nuanced perspective on the factors contributing to different types of crashes.
 
+The heatmap indicates that the most common age groups and lighting conditions tend to have the highest proportion of no-injury crashes. This observation suggests that higher vehicle volumes, often associated with daytime driving, result in more crashes overall, but these tend to be less severe. A plausible explanation is that during daytime, increased traffic volumes lead to more minor collisions due to congestion and low-speed accidents, which are generally safer.
+
+Additionally, the data shows that older people are significantly more likely to be involved in crashes during daylight hours, with a higher proportion of no-injury crashes. This trend aligns with typical driving patterns, where older drivers are less likely to drive at night. This finding may also reflect safer driving behavior among older drivers, who tend to avoid risky conditions such as nighttime driving.
+
+```{python}
+#| label: Visualizations-for-crash-severity-and-weather-Conditions
+#| code-fold: true
+
+# Mapping from original weather conditions to simplified categories
+weather_mapping = {
+    # Clear weather
+    "Clear": "Clear",
+    "Clear/Clear": "Clear",
+    "Clear/Cloudy": "Clear",
+    "Clear/Other": "Clear",
+    "Clear/Unknown": "Clear",
+    "Clear/Snow": "Clear",
+    "Clear/Rain": "Clear",
+    "Clear/Blowing sand, snow": "Clear",
+
+    # Cloudy weather
+    "Cloudy": "Cloudy",
+    "Cloudy/Cloudy": "Cloudy",
+    "Cloudy/Clear": "Cloudy",
+    "Cloudy/Unknown": "Cloudy",
+    "Cloudy/Other": "Cloudy",
+    "Cloudy/Blowing sand, snow": "Cloudy",
+    "Cloudy/Fog, smog, smoke": "Cloudy",
+    
+    # Rain
+    "Rain": "Rain",
+    "Rain/Rain": "Rain",
+    "Rain/Cloudy": "Rain",
+    "Rain/Sleet, hail (freezing rain or drizzle)": "Rain",
+    "Rain/Fog, smog, smoke": "Rain",
+    "Rain/Severe crosswinds": "Rain",
+    "Rain/Other": "Rain",
+    "Rain/Unknown": "Rain",
+    
+    # Snow
+    "Snow": "Snow",
+    "Snow/Snow": "Snow",
+    "Snow/Cloudy": "Snow",
+    "Snow/Clear": "Snow",
+    "Snow/Rain": "Snow",
+    "Snow/Other": "Snow",
+    "Snow/Blowing sand, snow": "Snow",
+    "Snow/Sleet, hail (freezing rain or drizzle)": "Snow",
+    
+    # Sleet, hail
+    "Sleet, hail (freezing rain or drizzle)": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Cloudy": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Severe crosswinds": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Blowing sand, snow": "Sleet/Hail",
+    "Sleet, hail (freezing rain or drizzle)/Fog, smog, smoke": "Sleet/Hail",
+    
+    # Severe crosswinds and windy conditions
+    "Severe crosswinds": "Windy",
+    "Blowing sand, snow": "Windy",
+    
+    # Fog, smog, smoke
+    "Fog, smog, smoke": "Fog",
+    "Fog, smog, smoke/Cloudy": "Fog",
+    "Fog, smog, smoke/Rain": "Fog",
+    
+    # Other and Unknown
+    "Unknown": "Unknown",
+    "Unknown/Unknown": "Unknown",
+    "Not Reported": "Unknown",
+    "Other": "Other",
+    "Reported but invalid": "Other",
+    "Unknown/Clear": "Unknown",
+    "Unknown/Other": "Unknown",
+}
+
+# Apply the mapping to simplify the "Weather Conditions"
+crash_data["Weather Conditions"] = crash_data["Weather Conditions"].map(weather_mapping).fillna("Other")
+
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Weather Conditions', hue='Crash Severity', data=crash_data, palette='coolwarm')
+plt.title('Crash Severity by Weather Conditions')
+plt.xlabel('Weather Conditions')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=45) 
+plt.show()
+
+```
+
+After filtering and simplifying the weather conditions to six main categories, we can analyze their impact on crash occurrences and severity. As expected, clear weather conditions are associated with the highest number of crashes, and, unsurprisingly, "no injury" is the most common outcome. This pattern aligns with general expectations, as most driving occurs during clear weather, with higher traffic volumes leading to more minor accidents.
+
+Interestingly, the data reveals that snowy conditions are associated with more crashes than cloudy weather, despite cloudy weather likely being more common. This observation suggests that snowy conditions, which often reduce visibility and traction, could increase the likelihood of accidents, even if the overall frequency of such weather is lower. It highlights the unique challenges posed by adverse weather and the potential for more severe accidents in these conditions.
+
+One limitation of this analysis is that it does not account for driving rates during different weather conditions. Without additional data, it's challenging to establish crash rates relative to the frequency of specific weather types. If more comprehensive data were available, it would be possible to calculate crash rates per mile driven or per hour of exposure to provide a more accurate representation of the risks associated with each weather condition.
+
+```{python}
+#| label: Heatmap-for-weather-by-severity-and-age
+#| code-fold: true
 
 # summarizing data using a pivot table
-pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Weather Group', aggfunc='count')
+pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Weather Conditions', aggfunc='count')
 
 # Normalize pivot table
 norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
 
 plt.figure(figsize=(10, 6))
-sns.heatmap(norm_pivot, cmap='plasma', annot=True, fmt=".2f", linewidths=.5)
-plt.title('Heatmap of how weather plays a factor for certain age groups being in more danger:')
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=45)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels
+plt.title('Heatmap of Weather Conditions by Age Group')
 plt.xlabel('Weather Conditions')
 plt.ylabel('Age Group')
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
 plt.show()
 
 ```
 
+The heatmap depicting the relationship between age groups and weather conditions provides insights into the frequency and severity of crashes under varying weather circumstances. Notably, the majority of non-fatal crashes occur in clear weather conditions. This observation aligns with the previous finding that clear conditions are associated with the highest overall crash counts.
 
 ```{python}
-# heatmap for road surface conditions affecting severity of crashes for certain age groups
+#| label: Visualizations-for-crash-severity-and-road-surface-conditions
+#| code-fold: true
 
-# Categorizing age groups
-def agegroups(age):
-    if age < 20:
-        return 'Under 20'
-    elif 20 <= age <= 25:
-        return '20-25'
-    elif 25 <= age <= 35:
-        return '25-35'
-    elif 35 <= age <= 50:
-        return '35-50'    
-    else:
-        return '60 and above'
+plt.figure(figsize=(8, 6))
+sns.countplot(x='Road Surface Condition', hue='Crash Severity', data=crash_data, palette='coolwarm')
+plt.title('Crash Severity by Road Surface Condition')
+plt.xlabel('Road Surface Condition')
+plt.ylabel('Number of Crashes')
+plt.legend(title='Crash Severity')
+plt.xticks(rotation=75) 
+plt.show()
 
-crash_data['Age Group'] = crash_data['Age'].apply(agegroups)
+
+```
+
+An analysis of road surface conditions indicates that dry roads have the highest count of overall crashes. This is likely due to the prevalence of dry roads during typical driving conditions and higher traffic volumes. However, road surfaces like wet and snowy also account for a significant number of crashes, highlighting the importance of traction in crash prevention.
+
+```{python}
+#| label: Heatmap-for-road-surface-condition-by-severity-and-age
+#| code-fold: true
 
 # summarizing data using a pivot table
 pivot_table = pd.pivot_table(crash_data, values='Crash Severity', index='Age Group', columns='Road Surface Condition', aggfunc='count')
 
 # Normalize pivot table
 norm_pivot = pivot_table.div(pivot_table.sum(axis=1), axis=0)
-plt.figure(figsize=(10, 6))
 
-sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='plasma')
-plt.title('Heatmap of how Road surfaces play a factor for certain age groups being in more danger:')
+heatmap = sns.heatmap(norm_pivot, annot=True, fmt=".2f", linewidths=.5, cmap='coolwarm', cbar=True)
+plt.xticks(rotation=75)  # Rotate x-axis tick labels
+plt.yticks(rotation=45)  # Rotate y-axis tick labels
+plt.title('Heatmap of Road surfaces and Age Groups')
 plt.xlabel('Road Surface Condition')
 plt.ylabel('Age Group')
+cbar = heatmap.collections[0].colorbar  # Get the colorbar
+cbar.set_label('Proportion of Crash Severity')  # Indicate proportion of crash types within a group
 plt.show()
 
 ```
 
-```{python}
-#| label: Visualizations for number of crashes by Age Group and Light Conditions
+The heatmap displaying road surface conditions and age groups offers valuable insights into the safety implications of various road surfaces. A notable observation is that unknown and unreported surface conditions are associated with a significant proportion of severe crashes. This might indicate challenges in data collection and reporting by various agencies, suggesting that incomplete data could obscure important safety risks.
 
+Despite having fewer overall crashes, icy, snowy, and wet roads exhibit higher rates of severe crashes. This finding underscores the danger posed by reduced traction and adverse weather conditions. The correlation between these road surface conditions and crash severity supports the need for additional safety measures, such as improved road maintenance, better reporting practices, and driver education on navigating challenging road conditions.
 
-plt.figure(figsize=(9, 6))
-sns.countplot(x='Age Group', hue='Light Conditions', data=crash_data, palette='coolwarm')
-plt.title('Impact of Light Conditions on number of crashes by Age Group')
-plt.xlabel('Age Group')
-plt.ylabel('Number of Crashes')
-plt.legend(title='Light Conditions')
-plt.show()
-
-
-```
-
-```{python}
-#| label: testing association between Light Conditions and Crash Severity within an Age Group
-
-
-#contingency_table = pd.crosstab(index=crash_data[crash_data['Age Group'] #== '19-25']['Crash Severity'],
-                               #columns=crash_data[crash_data['Age Group'] #== '19-25']['Light Conditions'])
-#chi2, p_value, dof, expected = chi2_contingency(contingency_table)
-#print(f"Chi-square test p-value for 19-25 age group and light conditions: #{p_value}")
-
-
-```
+Our analysis has provided a clear understanding of the variables most closely associated with crash severity, shedding light on the factors that significantly impact crash outcomes. This knowledge serves as a solid foundation for the modeling process detailed in Question 2, where we hope to build predictive models that leverage these insights. The findings also highlight the pronounced imbalance between no-injury crashes and highly severe crashes, emphasizing the need for public agencies and Departments of Transportation (DOTs) to focus on safety measures for reducing severe incidents. By addressing these disparities and targeting the key variables related to crash severity, we can contribute to improved road safety and more effective traffic management strategies.
 
 ### Question 2:
 
+The initial analysis from question 1 yielded interesting insights into the relationship between age and crash severity, along with environmental factors like lighting, weather, and road conditions. These findings help identify which age groups are most at risk and the circumstances that contribute to severe crashes. Given these insights, we now move to question 2, where the goal is to create a predictive model to classify crash severity.
+
+To start, we need to preprocess the crash data by filtering out rows where the severity is unknown. Next, we create a binary variable to distinguish crashes with "no injury" (property damage only) from those involving injuries or fatalities. This step is crucial due to the heavy imbalance of fatal crashes, which are relatively rare. This binary classification allows for a more straightforward modeling approach, focusing on predicting the likelihood of crashes resulting in injury or fatality. Below, we create a table to display the count of no-injury crashes and injury/fatality crashes to understand the distribution of our target variable.
+
 ```{python}
+#| label: Create-binary-feature-variable
+#| code-fold: true
+
 # Filter rows where the severity is unknow
 crash_data = crash_data[crash_data['Crash Severity'] != "Unknown"]
 
 # Add a new column named 'feature_variable'
-crash_data['feature_variable'] = [0 if x == 'Property damage only (none injured)' else 1 for x in crash_data['Crash Severity']]
+crash_data['feature_variable'] = [0 if x == 'No injury' else 1 for x in crash_data['Crash Severity']]
 
 # Drop the 'Crash Severity' column
 crash_data = crash_data.drop('Crash Severity', axis=1)
+
+# Create a count table for the new feature variable
+severity_counts = crash_data['feature_variable'].value_counts().rename({0: 'No Injury', 1: 'Injury/Fatality'})
+
+# Display the count table
+print(severity_counts)
 ```
 
+With the target variable established, it is important to explore its relationships with a specific set of feature variables. These variables were chosen based on preliminary analysis and fundamental concepts in traffic engineering, recognizing that certain factors are closely associated with crash severity.
+
+- Speed Limit: Known to be correlated with crash severity.
+- Light Conditions: Affects visibility and safety.
+- Weather Conditions: Influences road conditions and crash likelihood.
+- Road Surface Condition: Determines traction and safety.
+- Roadway Junction Type: Indicates types of intersections and their risks.
+- Traffic Control Device Type: Affects traffic flow and safety.
+- Manner of Collision: Describes the nature of crash events.
+- Age: A demographic factor.
+- Sex: Another demographic factor.
+
+The following plots include a correlation matrix and a pair plot. The correlation matrix shows that the numeric variables have little to no correlation with each other, indicating independence between them. The pair plot provides a more detailed visualization of the relationships among the numeric features, helping to identify potential patterns or trends not immediately apparent from the raw data.
+
 ```{python}
-# Indetify & Visualize relationships between features and the target variable 'feature_variable'
+#| label: visualize-relationship-between-numeric-features-and-target-variable
+#| code-fold: true
 
-# Instead of using all the features, I am using custom_feature_set 
-# for simplicity with 3 most correlated features and 2 least correlated features
+# Select certain feature variables based on analysis in Q1 and understanding of traffic engineering
+columns_to_keep = [
+    'feature_variable',
+    'Light Conditions',
+    'Manner of Collision',
+    'Road Surface Condition',
+    'Roadway Junction Type',
+    'Traffic Control Device Type',
+    'Weather Conditions',
+    'Speed Limit',
+    'Age',
+    'Sex'
+]
 
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+# Create the subset from the crash_data DataFrame
+model_crash_data = crash_data[columns_to_keep]
 
-correlation_matrix = numerical_cols.corr()
 
-# The correlation of each feature with the target variable 'mc_preschool'
-correlation_with_target = correlation_matrix['feature_variable'].abs().sort_values(ascending=False)
+# Select only numerical columns to create a subset
+numerical_crash_data = model_crash_data.select_dtypes(include=['int64', 'float64'])
 
-most_correlated_features = correlation_with_target[1:4]  # Exclude the target variable itself
-least_correlated_features = correlation_with_target[-2:] 
+# Now create the correlation matrix with the subset
+correlation_matrix = numerical_crash_data.corr()
 
-# Convert the indices of selected features to a list and merge them together
-most_correlated_features = most_correlated_features.index.tolist()
-least_correlated_features = least_correlated_features.index.tolist()
-custom_feature_set = most_correlated_features + least_correlated_features
+# Create a heatmap for the correlation matrix
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Correlation Matrix Heatmap")
+plt.show()
 
-# Visualize relationships between the custom feature set and the target variable using a pairplot
-sns.pairplot(numerical_cols, x_vars=custom_feature_set, y_vars='feature_variable', kind='scatter')
+# Create a pairplot for the numerical subset
+sns.pairplot(numerical_crash_data)
+plt.title("Pairplot for Numerical Columns")
 plt.show()
 
 ```
 
+Following this, the report includes bar plots for each of the categorical columns and their relationships with the feature variables. These plots serve to highlight the distribution of the categorical data, offering a clearer understanding of how these features relate to the target variable. This analysis aims to uncover meaningful patterns that can guide further investigations and inform safety measures in traffic engineering.
+
 ```{python}
-# Data Cleaning
-# Analysis of Missing Values
+#| label: visualize-relationship-between-categorical-features-and-target-variable
+#| code-fold: true
+
+# Perform minor feature engineering for variables with excessive options
+
+# Create a mapping for the "Sex" column
+sex_mapping = {
+    "F - Female": "F",
+    "M - Male": "M",
+    "U - Unknown": "U",
+    "X - Non-Binary": "X"
+}
+
+# Apply the mapping to the "Sex" column
+model_crash_data["Sex"] = model_crash_data["Sex"].map(sex_mapping)
+
+# Define the age bins and labels
+age_bins = [0, 16, 17, 20, 24, 34, 44, 54, 64, 74, 84, 200]
+age_labels = ["<16", "16-17", "18-20", "21-24", "25-34", "35-44", "45-54", "55-64", "65-74", "75-84", ">84"]
+
+# Apply binning to the "Age" column
+model_crash_data["Age"] = pd.cut(model_crash_data["Age"], bins=age_bins, labels=age_labels, right=False)
+
+# Stacked bar plot for Sex and feature_variable
+sns.countplot(x='Sex', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Sex and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Stacked bar plot for Traffic Control Device Type and feature_variable
+sns.countplot(x='Traffic Control Device Type', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Traffic Control Device Type and feature_variable")
+plt.xticks(rotation=90)
+plt.show()
+
+# Stacked bar plot for Weather Conditions and feature_variable
+sns.countplot(x='Weather Conditions', hue='feature_variable', data=model_crash_data)
+plt.title("Stacked Bar Plot for Weather Conditions and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Box plot for Age Group and feature_variable
+sns.countplot(x='Age', hue='feature_variable', data=model_crash_data)
+plt.title("Box Plot for Age Group and feature_variable")
+plt.xticks(rotation=45)
+plt.show()
+
+# Crosstab for Roadway Junction Type and feature_variable
+sns.countplot(x='Roadway Junction Type', hue='feature_variable', data=model_crash_data)
+plt.title("Box Plot for Roadway Junction Type and feature_variable")
+plt.xticks(rotation=75)
+plt.show()
+
+```
+
+In this section, we meticulously examine the dataset for missing values, distinguishing between numerical and categorical columns. Addressing missing data is crucial for ensuring the integrity and reliability of subsequent analyses. By systematically scrutinizing both numerical and categorical columns, we aim to identify any gaps in the dataset and determine the appropriate course of action. This meticulous approach allows us to maintain the quality of the data and make informed decisions regarding data imputation or removal.
+
+```{python}
+#| label: Data-cleaning-and-missing-value-analysis
+#| code-fold: true
 
 # Find numerical columns
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64'])
+numerical_cols = model_crash_data.select_dtypes(include = ['int64', 'float64'])
 
 # Calculate missing values count for each numerical column
 missing_values_count = numerical_cols.isnull().sum()
 
 # Calculate missing rate for each numerical column
-missing_rate = (missing_values_count / len(crash_data)) * 100
+missing_rate = (missing_values_count / len(model_crash_data)) * 100
 
 missing_data = pd.DataFrame({
     'Missing Values': missing_values_count,
@@ -346,10 +572,10 @@ print('Analysis of Missing Values for numerical features: \n\n', missing_data, '
 
 # Drop categorical columns with missing rate over 50%
 columns_to_drop = missing_rate[missing_rate > 50].index
-crash_data = crash_data.drop(columns_to_drop, axis=1)
+model_crash_data = model_crash_data.drop(columns_to_drop, axis=1)
 
 # Find categorical columns
-categorical_columns = crash_data.select_dtypes(include = ['object', 'category'])
+categorical_columns = model_crash_data.select_dtypes(include = ['object', 'category'])
 
 # Calculate missing values count for each categorical column
 missing_values_count = categorical_columns.isnull().sum()
@@ -369,90 +595,60 @@ columns_to_drop = missing_rate[missing_rate > 50].index
 crash_data = crash_data.drop(columns_to_drop, axis=1)
 ```
 
+
 ```{python}
-all_columns = crash_data.select_dtypes(include = ['int64', 'float64', 'object', 'category'])
+#| label: Missing-value-removal
+#| echo: false
 
-# Calculate mode for each categorical column
-mode_values = all_columns.mode().iloc[0]
+# Drop all rows with missing values
+model_crash_data_cleaned = model_crash_data.dropna()
+```
 
-# Fill missing values with mode for each column
-crash_data = crash_data.fillna(mode_values)
+Given the critical nature of this analysis, handling missing values is a significant concern. The decision was made to remove rows with missing data rather than impute. This choice was driven by the observation that the column with the highest number of missing values had only 8% of its entries missing. By removing these rows, we avoid introducing bias that could arise from imputation, which is a particularly sensitive issue in crash modeling.
 
-print(crash_data.head())
+Regarding data standardization and encoding, the "Speed Limit" variable was converted to a categorical data type. This decision reflects the fact that speed limits are often discrete and do not behave like continuous numerical variables. Treating them as categorical eliminates the risk of implying linear relationships or gradients where they do not exist.
+
+For other categorical features, such as intersection type and weather conditions, one-hot encoding was employed. This approach was chosen over label encoding because it avoids the implication of ordinality among categorical variables. Label encoding could suggest an inherent order or ranking between categories, which is not appropriate for these types of features.
+
+By using one-hot encoding, we retain the categorical nature of these features while preparing them for use in machine learning models. This step ensures that the encoded data accurately reflects the characteristics of the original dataset without introducing unintended biases.
+
+```{python}
+#| label: Encoding-categorical-variables
+#| code-fold: true
+
+# Convert "Speed Limit" to a categorical data type
+model_crash_data_cleaned['Speed Limit'] = model_crash_data_cleaned['Speed Limit'].astype('category')
+
+# Select categorical columns
+categorical_columns = model_crash_data_cleaned.select_dtypes(include=['object', 'category']).columns.tolist()
+
+print("Categorical Columns:")
+print(categorical_columns)
+print()
+
+# One-hot encode categorical variables
+crash_data_encoded = pd.get_dummies(model_crash_data_cleaned, columns=categorical_columns, drop_first=True)
+
+print("One-Hot Encoded Data:")
+crash_data_encoded.head()
+
 ```
 
 ```{python}
-# Standardize features with StandardScaler
+#| label: Define-feature-and-target-variables
+#| echo: false
 
-numerical_cols = crash_data.select_dtypes(include = ['int64', 'float64']).columns
-
-# Exclude our output feature: 'feature_variable'
-feature_to_exclude = 'feature_variable'
-numerical_cols = numerical_cols.drop(feature_to_exclude, errors='ignore')
-
-scaler = StandardScaler()
-
-# Fit and transform the numerical columns using StandardScaler
-crash_data[numerical_cols] = scaler.fit_transform(crash_data[numerical_cols])
-
-# Display the first few rows of the scaled dataset
-print(crash_data.head())
-```
-
-```{python}
-# Encode categorical variables
-categorical_columns = crash_data.select_dtypes(include = ['object', 'category']).columns.tolist()
-
-# Convert numerical columns to strings if necessary
-crash_data[categorical_columns] = crash_data[categorical_columns].astype(str)
-
-# Encode categorical variables
-label_encoders = {col: LabelEncoder() for col in categorical_columns}
-for col in categorical_columns:
-    crash_data[col] = label_encoders[col].fit_transform(crash_data[col])
-
-# Convert categorical columns to numerical using one-hot encoding
-crash_data = pd.get_dummies(crash_data, columns=categorical_columns)
-
-print(crash_data.head())
-```
-
-```{python}
 # Define features and target
-X = crash_data.drop('feature_variable', axis = 1)
-y = crash_data['feature_variable']
+X = crash_data_encoded.drop('feature_variable', axis = 1)
+y = crash_data_encoded['feature_variable']
 ```
 
 ```{python}
-batch_size = 100
+#| label: Train-Test-Split
+#| echo: false
 
-# Initialize an empty array to store the selected feature indices
-selected_feature_indices = []
-
-# Iterate over the dataset in batches and perform feature selection
-for batch_start in range(0, len(X), batch_size):
-    X_batch = X.iloc[batch_start:batch_start+batch_size]
-    y_batch = y.iloc[batch_start:batch_start+batch_size]
-    
-    # Perform feature selection on the current batch
-    k_best_selector = SelectKBest(score_func=f_classif, k=30)
-    X_selected_batch = k_best_selector.fit_transform(X_batch, y_batch)
-    
-    # Get the indices of the selected features and append to the list
-    selected_feature_indices.extend(k_best_selector.get_support(indices=True))
-
-# Get the names of the selected features
-selected_features = X.columns[selected_feature_indices]
-
-print('Selected features: \n\n', selected_features)
-
-# Extract the selected features from the original DataFrame X
-X_selected = X[selected_features]
-```
-
-```{python}
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=9)
 
 # Display the shapes of the training and testing sets
 print("Shape of X_train:", X_train.shape)
@@ -462,7 +658,11 @@ print("Shape of y_test:", y_test.shape)
 ```
 
 ```{python}
-log_reg = LogisticRegression(solver = 'liblinear', max_iter = 1000, random_state = 42)
+#| label: Initializing-the-model
+#| echo: false
+#| output: false
+
+log_reg = LogisticRegression(random_state = 9)
 log_reg.fit(X_train, y_train)
 
 dtree = DecisionTreeClassifier()
@@ -475,12 +675,18 @@ knn = KNeighborsClassifier(n_neighbors = 5)
 knn.fit(X_train, y_train)
 ```
 
+Following the data preprocessing and encoding steps, the next phase involves defining and evaluating four distinct models: logistic regression, decision tree, random forest, and K-nearest neighbors (KNN). These models represent a range of approaches to classification, from linear methods to ensemble techniques and distance-based algorithms.
+
+To assess the performance of these models, the dataset was split into training and testing sets using an 80/20 ratio, with 80% of the data used for training and 20% for testing. This split allows for robust evaluation of the models' ability to generalize to new data.
+
+Below, we report the results for each model using key metrics: accuracy, precision, recall, and F1 score. These metrics offer a comprehensive view of model performance, highlighting not only the overall accuracy but also the ability to correctly identify positive and negative cases (precision), the rate of true positive predictions (recall), and the balance between precision and recall (F1 score).
+
 ```{python}
-# Model Validation
+#| label: Model-validation
+#| code-fold: true
 
 # List of classifiers
 classifiers = [log_reg, dtree, rf_classifier, knn]
-# classifiers = [log_reg]
 
 # Perform cross-validation and compute evaluation metrics for each classifier
 for classifier in classifiers:
@@ -499,106 +705,149 @@ for classifier in classifiers:
     print('Precision: ', precision)
     print('Recall: ', recall)
     print('F1-Score: ', f1)
+    print()
 ```
 
 ```{python}
-probs_knn = knn.predict_proba(X_test)
-# Keep probabilities for the positive outcome only
-probs_knn = probs_knn[:, 1]
-# Compute the ROC curve
-fpr_knn, tpr_knn, thresholds = roc_curve(y_test, probs_knn)
-roc_auc_knn = auc(fpr_knn, tpr_knn)
+#| label: Compute-ROC-AUC
+#| echo: false
 
+# K-Nearest Neighbors (KNN)
+probs_knn = knn.predict_proba(X_test)  # Get probabilities for KNN
+probs_knn = probs_knn[:, 1]  # Keep probabilities for the positive class
+fpr_knn, tpr_knn, thresholds = roc_curve(y_test, probs_knn)  # Compute ROC curve
+roc_auc_knn = auc(fpr_knn, tpr_knn)  # Calculate AUC for the ROC curve
+
+# Random Forest
 probs_forest = rf_classifier.predict_proba(X_test)
-probs_forest = probs_forest[:, 1]
-fpr_forest, tpr_forest, thresholds = roc_curve(y_test, probs_forest)
-roc_auc_forest = auc(fpr_forest, tpr_forest)
+probs_forest = probs_forest[:, 1]  # Keep probabilities for the positive class
+fpr_forest, tpr_forest, thresholds = roc_curve(y_test, probs_forest)  # ROC curve
+roc_auc_forest = auc(fpr_forest, tpr_forest)  # AUC for Random Forest
 
-
+# Decision Tree
 probs_tree = dtree.predict_proba(X_test)
-probs_tree = probs_tree[:, 1]
-fpr_tree, tpr_tree, thresholds = roc_curve(y_test, probs_tree)
-roc_auc_tree = auc(fpr_tree, tpr_tree)
+probs_tree = probs_tree[:, 1]  # Positive class probabilities
+fpr_tree, tpr_tree, thresholds = roc_curve(y_test, probs_tree)  # ROC curve
+roc_auc_tree = auc(fpr_tree, tpr_tree)  # AUC for Decision Tree
 
-
+# Logistic Regression
 probs_log = log_reg.predict_proba(X_test)
-probs_log = probs_log[:, 1]
-fpr_log, tpr_log, thresholds = roc_curve(y_test, probs_log)
-roc_auc_log = auc(fpr_log, tpr_log)
+probs_log = probs_log[:, 1]  # Probabilities for the positive class
+fpr_log, tpr_log, thresholds = roc_curve(y_test, probs_log)  # ROC curve
+roc_auc_log = auc(fpr_log, tpr_log)  # AUC for Logistic Regression
 ```
 
+To evaluate the performance of our classifiers, we plotted the Receiver Operating Characteristic (ROC) curve and calculated the Area Under the Curve (AUC). The ROC curve helps us understand the trade-off between the True Positive Rate and the False Positive Rate, providing a visual representation of the model's ability to distinguish between classes. A higher AUC value indicates a better-performing model, with a perfect classifier achieving an AUC of 1.
+
+In the following plot, you will see ROC curves for K-Nearest Neighbors, Decision Tree, Random Forest, and Logistic Regression classifiers. Among these models, the Random Forest classifier had the highest AUC, indicating that it was the closest to the top-left corner of the ROC plot, demonstrating strong discriminative ability. This makes Random Forest the most promising model among those tested.
+
 ```{python}
-plt.figure(figsize=(8, 6))
-plt.plot(fpr_knn, tpr_knn, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc_knn:.2f}) for KNN')
-plt.plot(fpr_tree, tpr_tree, color='blue', lw=2, label=f'ROC curve (area = {roc_auc_tree:.2f}) for Decision Tree')
-plt.plot(fpr_forest, tpr_forest, color='red', lw=2, label=f'ROC curve (area = {roc_auc_forest:.2f}) for Random Forest')
-plt.plot(fpr_log, tpr_log, color='Green', lw=2, label=f'ROC curve (area = {roc_auc_log:.2f}) for Logistic Regression')
-plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')  # Diagonal 45 degree line
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
+#| label: Plotting-ROC-AUC
+#| code-fold: true
+
+# Plot ROC curves for different classifiers
+plt.figure(figsize=(8, 6))  # Set the plot size
+
+# ROC curve for KNN with AUC
+plt.plot(fpr_knn, tpr_knn, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc_knn:.2f}) for KNN')
+
+# ROC curve for Decision Tree
+plt.plot(fpr_tree, tpr_tree, color='blue', lw=2, label=f'ROC curve (AUC = {roc_auc_tree:.2f}) for Decision Tree')
+
+# ROC curve for Random Forest
+plt.plot(fpr_forest, tpr_forest, color='red', lw=2, label=f'ROC curve (AUC = {roc_auc_forest:.2f}) for Random Forest')
+
+# ROC curve for Logistic Regression
+plt.plot(fpr_log, tpr_log, color='green', lw=2, label=f'ROC curve (AUC = {roc_auc_log:.2f}) for Logistic Regression')
+
+# Diagonal line representing random guessing
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')  # Random classifier
+
+# Set plot limits and labels
+plt.xlim([0, 1])  # X-axis from 0 to 1 (False Positive Rate)
+plt.ylim([0, 1.05])  # Y-axis from 0 to slightly above 1 (True Positive Rate)
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic (ROC) Curve')
-plt.legend(loc="lower right")
-plt.show()
+plt.title('Receiver Operating Characteristic (ROC) Curve')  # Title
+
+# Display the legend in the lower right corner
+plt.legend(loc='lower right')
+
+# Show the plot
+plt.show() 
 ```
 
 ```{python}
-### Accuracy on Test data
+#| label: Make-predictions-for-future-confusion-matrix
+#| echo: false
 
 predictions_log = log_reg.predict(X_test)
-print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
+# print("Logistic Regression Accuracy:", np.round(accuracy_score(y_test, predictions_log),3))
 
 predictions_tree = dtree.predict(X_test)
-print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
+# print("Decision Tree Accuracy:", np.round(accuracy_score(y_test, predictions_tree),3))
 
 predictions_forest = rf_classifier.predict(X_test)
-print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
-
+# print("Random Forest Accuracy:", np.round(accuracy_score(y_test, predictions_forest),3))
 
 predictions_knn = knn.predict(X_test)
-print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
-
-
+# print("KNN Accuracy:",np.round(accuracy_score(y_test, predictions_knn),3))
 ```
 
+To further examine model performance, we turn to confusion matrices, which provide a detailed breakdown of predictions versus actual outcomes. These matrices are particularly useful for identifying issues with class imbalance and evaluating model tendencies.
+
+The confusion matrices presented below reveal a key insight: the models tend to predict 0 (non-severe crashes) far more frequently than 1 (severe crashes). This tendency is a common consequence of imbalanced data, where the majority class overwhelms the minority class. While this approach can yield high accuracy, it often comes at the expense of poor recall and precision, especially for the minority class.
+
+These findings align with the earlier observation that our models, despite high accuracy, often fall short in terms of precision, recall, and F1 score. By examining these confusion matrices, we can better understand how model predictions are skewed and what adjustments might be needed to improve overall performance.
+
 ```{python}
-## Confusion Matrix
+#| label: Confusion-matrices
+#| code-fold: true
+
+# Create a 2x2 grid for the subplots
+fig, axs = plt.subplots(2, 2, figsize=(10, 10))  # Define the grid structure
+
+# Confusion Matrix for Logistic Regression
 cm = confusion_matrix(y_test, predictions_log)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Logistic Regression Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
-```
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 0])  # Plot in the top-left
+axs[0, 0].set_title('Logistic Regression Confusion Matrix')  # Set the title
 
-```{python}
-## Confusion Matrix
+# Confusion Matrix for KNN
 cm = confusion_matrix(y_test, predictions_knn)
-sns.heatmap(cm, annot = True, fmt ='g')
-plt.title('KNN Confusion Matrix') 
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 1])  # Plot in the top-right
+axs[0, 1].set_title('KNN Confusion Matrix')
 
-```
-
-```{python}
+# Confusion Matrix for Decision Tree
 cm = confusion_matrix(y_test, predictions_tree)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Decision Tree Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
-plt.show()
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 0])  # Plot in the bottom-left
+axs[1, 0].set_title('Decision Tree Confusion Matrix')
 
-```
-
-```{python}
-
+# Confusion Matrix for Random Forest
 cm = confusion_matrix(y_test, predictions_forest)
-sns.heatmap(cm, annot = True, fmt = 'g')
-plt.title('Random Forest Confusion Matrix')
-plt.ylabel('Actual label')
-plt.xlabel('Predicted label')
+sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 1])  # Plot in the bottom-right
+axs[1, 1].set_title('Random Forest Confusion Matrix')
+
+# Set common x and y labels
+for ax in axs.flat:
+    ax.set_ylabel('Actual label')
+    ax.set_xlabel('Predicted label')
+
+# Adjust the layout to prevent overlap
+plt.tight_layout()
+
+# Show the plot with all subplots
 plt.show()
 ```
+
+
+## Discussion of Results & Conclusions
+
+The objective of this project was to analyze the relationship between various features and a target variable to understand crash severity and evaluate the performance of different classifiers. After establishing a set of key feature variables, including 'Speed Limit', 'Light Conditions', 'Weather Conditions', 'Road Surface Condition', 'Roadway Junction Type', 'Traffic Control Device Type', 'Manner of Collision', 'Age', and 'Sex', we proceeded to build and test four machine learning models: Logistic Regression, Decision Tree, Random Forest, and K-Nearest Neighbors (KNN).
+
+While all models achieved an accuracy of approximately 78%, it became evident that accuracy alone wasn't a sufficient measure due to the imbalanced nature of the dataset. This led us to examine additional metrics such as precision, recall, and F1 score, which offer more insights into model performance in the context of class imbalance. These metrics reveal that models tended to predict the majority class (non-severe crashes), yielding high accuracy but low recall and precision for the minority class (severe crashes).
+
+Among the four classifiers, the Random Forest (RF) model demonstrated the best performance. It achieved a higher true positive rate, leading to improved recall, precision, and F1 score compared to other models. This result suggests that RF's ensemble nature and ability to handle diverse data make it particularly effective for this type of analysis.
+
+Despite the promising results with Random Forest, there are several areas for future research and improvement. For instance, additional metrics, such as processing time and resource utilization, could be considered to evaluate model efficiency. Furthermore, addressing class imbalance through resampling techniques or class weights could enhance model accuracy and reliability for the minority class. Exploring different feature engineering approaches, integrating more contextual data, or experimenting with other machine learning algorithms may also yield improved outcomes.
+
+In conclusion, this study highlights the challenges associated with imbalanced data and underscores the importance of considering multiple performance metrics beyond accuracy. Random Forest proved to be a strong candidate for predicting crash severity, but further research and refinement are needed to build more robust and efficient models. Future studies could focus on enhancing recall and precision for minority classes and exploring additional features that contribute to crash dynamics.
