@@ -485,7 +485,7 @@ plt.show()
 
 # Create a pairplot for the numerical subset
 sns.pairplot(numerical_crash_data)
-plt.title("Pairplot for Numerical Columns")
+# plt.title("Pairplot for Numerical Columns")
 plt.show()
 
 ```
@@ -805,27 +805,27 @@ These findings align with the earlier observation that our models, despite high 
 #| code-fold: true
 
 # Create a 2x2 grid for the subplots
-fig, axs = plt.subplots(2, 2, figsize=(10, 10))  # Define the grid structure
+fig, axs = plt.subplots(2, 2, figsize=(8, 6))  # Define the grid structure
 
 # Confusion Matrix for Logistic Regression
 cm = confusion_matrix(y_test, predictions_log)
 sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 0])  # Plot in the top-left
-axs[0, 0].set_title('Logistic Regression Confusion Matrix')  # Set the title
+axs[0, 0].set_title('Logistic Regression Confusion Matrix',fontdict={"size":10})  # Set the title
 
 # Confusion Matrix for KNN
 cm = confusion_matrix(y_test, predictions_knn)
 sns.heatmap(cm, annot=True, fmt='g', ax=axs[0, 1])  # Plot in the top-right
-axs[0, 1].set_title('KNN Confusion Matrix')
+axs[0, 1].set_title('KNN Confusion Matrix',fontdict={"size":10})
 
 # Confusion Matrix for Decision Tree
 cm = confusion_matrix(y_test, predictions_tree)
 sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 0])  # Plot in the bottom-left
-axs[1, 0].set_title('Decision Tree Confusion Matrix')
+axs[1, 0].set_title('Decision Tree Confusion Matrix',fontdict={"size":10})
 
 # Confusion Matrix for Random Forest
 cm = confusion_matrix(y_test, predictions_forest)
 sns.heatmap(cm, annot=True, fmt='g', ax=axs[1, 1])  # Plot in the bottom-right
-axs[1, 1].set_title('Random Forest Confusion Matrix')
+axs[1, 1].set_title('Random Forest Confusion Matrix',fontdict={"size":10})
 
 # Set common x and y labels
 for ax in axs.flat:
