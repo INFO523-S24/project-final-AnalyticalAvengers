@@ -63,7 +63,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 -   By analyzing the height of the bars for each age group and severity level, you can identify which age groups are more likely to be involved in crashes of varying severity.
 
- -   the plot might show that younger or older drivers have a higher number of crashes with minor injuries compared to middle-aged drivers.
+ -   majority of drivers that tend to get into crashes are between 26-40 that shows that younger drivers are more prone to accidents
 
 :::
 
@@ -80,7 +80,7 @@ Which age groups are at the highest risk of getting into severe crashes, and how
 
 -   By analyzing the height of the bars for each lighting condition and severity level, you can identify lighting conditions with a higher number of crashes of varying severity.
 
--    the plot might show that crashes with severe injuries are more frequent under dark conditions with no lighting compared to daylight conditions.
+-    The plot shows that severe car crashes are more frequent in the daylight than on a lit roadway.
 
   
 :::
