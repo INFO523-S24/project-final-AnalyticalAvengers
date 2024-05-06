@@ -7,6 +7,8 @@ jupyter: python3
 
 This project was developed by **ANALYTICAL AVENGERS** For [INFO 523 - Data Mining and Discovery](https://datamineaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.
 
+-   Gabriel Geffen, 1st year PhD Student of Civil Engineering with an emphasis in Transportation Engineering
+
 -   Tanya Evita George- First year graduate student pursuing Data Science at the University of Arizona.
 
 -   Mohammad Ali Farmani : 2nd year PhD student in Hydrology and Atmospheric Sciences in University of Arizona.
